@@ -1,11 +1,21 @@
 package com.ssd.agenda_SSD_back.dto;
 
 import com.ssd.agenda_SSD_back.entity.User;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 public class UserDto {
+    @Schema(description = "Nome do usuário")
+    @NotBlank(message = "O nome é obrigatório")
     private String name;
+    @Schema(description = "Email do usuário")
+    @NotBlank(message = "O email é obrigatório")
     private String email;
+    @Schema(description = "Senha do usuário, entre 6 e 10 caracteres")
+    @Size(min = 6, max = 10, message = "A senha deve ter entre 6 e 10 caracteres.")
     private String password;
+    @Schema(description = "Matrícula do usuário")
     private Long matricula;
 
     public String getName() {
