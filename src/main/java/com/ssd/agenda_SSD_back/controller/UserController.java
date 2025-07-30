@@ -1,5 +1,4 @@
 package com.ssd.agenda_SSD_back.controller;
-import com.ssd.agenda_SSD_back.UserRepository;
 import com.ssd.agenda_SSD_back.dto.UserDto;
 import com.ssd.agenda_SSD_back.dto.UserResponseDto;
 import com.ssd.agenda_SSD_back.entity.User;
@@ -17,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("api/users")
 public class UserController {
     @Autowired
-    private final UserService userService;
+    final private UserService userService;
 
     public UserController(UserService userService) {
         this.userService = userService;
