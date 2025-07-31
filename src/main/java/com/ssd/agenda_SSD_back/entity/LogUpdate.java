@@ -4,22 +4,21 @@ import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
-
 @Entity
-@Table(name="log")
+@Table(name = "log")
 public class LogUpdate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name="action", nullable = false)
+    @Column(name = "action", nullable = false)
     private String action; // Ações: CREATE, UPDATE, DELETE
-    @Column(name="log_date", nullable = false)
+    @Column(name = "log_date", nullable = false)
     private LocalDateTime logDateTime;
-    @Column(name="change_fields",nullable = true, columnDefinition = "TEXT")
+    @Column(name = "change_fields", nullable = true, columnDefinition = "TEXT")
     private String changedFields; // Campos e valores alterados
 
     // ID do usuário (sem vínculo de chave estrangeira, para manter as informações do log após a exclusão do usuário)
-    // @ManyToOne
+    @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User updatedBy;
 

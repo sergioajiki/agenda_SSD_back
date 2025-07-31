@@ -3,7 +3,7 @@ package com.ssd.agenda_SSD_back.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name="users") //Nome explícito para a tabela
+@Table(name = "users") //Nome explícito para a tabela
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,7 +14,7 @@ public class User {
     private String email;
     @Column(nullable = false, length = 100)
     private String password;
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false)
     private Long matricula;
 
     public Long getId() {

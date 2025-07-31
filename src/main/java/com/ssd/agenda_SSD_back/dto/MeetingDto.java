@@ -88,7 +88,7 @@ public class MeetingDto {
         this.userId = userId;
     }
 
-    public static Meeting toEntity (MeetingDto meetingDto, User user){
+    public static Meeting toEntity(MeetingDto meetingDto, User user) {
         Meeting meeting = new Meeting();
         meeting.setTitle(meetingDto.getTitle());
         meeting.setMeetingDate(meetingDto.getMeetingDate());
@@ -99,7 +99,7 @@ public class MeetingDto {
         return meeting;
     }
 
-    public static MeetingDto fromEntity(Meeting meeting){
+    public static MeetingDto fromEntity(Meeting meeting) {
         MeetingDto meetingDto = new MeetingDto();
         meetingDto.setId(meeting.getId());
         meetingDto.setTitle(meeting.getTitle());

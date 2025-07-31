@@ -1,29 +1,29 @@
 package com.ssd.agenda_SSD_back.entity;
 
 import jakarta.persistence.*;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Entity
-@Table(name="meeting") // Nome da tabela
+@Table(name = "meeting") // Nome da tabela
 public class Meeting {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false, length = 150)
     private String title;
-    @Column (name="update_date", nullable = false)
+    @Column(name = "update_date", nullable = false)
     private LocalDateTime updateDate;
-    @Column(name="meet_date", nullable = false)
+    @Column(name = "meet_date", nullable = false)
     private LocalDate meetingDate; // Data no formato yyyy-MM-dd
-    @Column(name="time_start", nullable = false)
+    @Column(name = "time_start", nullable = false)
     private LocalTime timeStart; // Horário (hh:mm)
-    @Column(name="time_end", nullable = false)
+    @Column(name = "time_end", nullable = false)
     private LocalTime timeEnd; // Horário (hh:mm)
-
     @ManyToOne
-    @JoinColumn(name="user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User hostUser;
 
     public Long getId() {
