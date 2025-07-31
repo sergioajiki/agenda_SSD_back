@@ -13,7 +13,7 @@ public class Meeting {
     @Column(nullable = false, length = 150)
     private String title;
     @Column(name="meet_date", nullable = false)
-    private LocalDate meetDate; // D+ata no formato yyyy-MM-dd
+    private LocalDate meetDate; // Data no formato yyyy-MM-dd
     @Column(name="time_start", nullable = false)
     private LocalTime timeStart; // Horário (hh:mm)
     @Column(name="time_end", nullable = false)
