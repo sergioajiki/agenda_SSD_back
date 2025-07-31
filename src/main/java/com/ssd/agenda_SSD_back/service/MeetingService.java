@@ -1,7 +1,9 @@
 package com.ssd.agenda_SSD_back.service;
 
 
+import com.ssd.agenda_SSD_back.dto.MeetingDto;
 import com.ssd.agenda_SSD_back.entity.Meeting;
+import com.ssd.agenda_SSD_back.entity.User;
 import com.ssd.agenda_SSD_back.repository.MeetingRepository;
 import com.ssd.agenda_SSD_back.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +18,12 @@ public class MeetingService {
     private UserRepository userRepository;
 
     // Criar função para Salvar meeting
-
+    public Meeting saveMeeting(MeetingDto meetingDto) {
+        User user = userRepository.findById(meetingDto.getUserId()).orElseThrow(()-> new RuntimeException("Usuário não encontrado com ID: " + meetingDto.getUserId()));
+        Meeting meeting = MeetingDto.toEntity(meetingDto, user);
+        Meeting savedMeeting = meetingRepository.save(meeting);
+        return savedMeeting;
+    }
     // Criar função para Apagar meeting
 
     // Criar função para Encortrar meeting por Id
