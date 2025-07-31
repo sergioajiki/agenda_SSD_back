@@ -2,6 +2,7 @@ package com.ssd.agenda_SSD_back.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Entity
@@ -12,6 +13,8 @@ public class Meeting {
     private Long id;
     @Column(nullable = false, length = 150)
     private String title;
+    @Column (name="update_date", nullable = false)
+    private LocalDateTime updateDate;
     @Column(name="meet_date", nullable = false)
     private LocalDate meetDate; // Data no formato yyyy-MM-dd
     @Column(name="time_start", nullable = false)
@@ -37,6 +40,14 @@ public class Meeting {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public LocalDateTime getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(LocalDateTime updateDate) {
+        this.updateDate = updateDate;
     }
 
     public LocalDate getMeetDate() {

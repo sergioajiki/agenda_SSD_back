@@ -2,8 +2,7 @@ package com.ssd.agenda_SSD_back.entity;
 
 import jakarta.persistence.*;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
 
 @Entity
@@ -13,12 +12,12 @@ public class LogUpdate {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name="action", nullable = false)
-    private String action;
+    private String action; // Ações: CREATE, UPDATE, DELETE
     @Column(name="log_date", nullable = false)
-    private LocalDate logDate; // Data no formato yyyy-MM-dd
-    @Column(name="log_time", nullable = false)
-    private LocalTime logTime; // Horário (hh:mm)
-
+    private LocalDateTime logDateTime;
+    @Column(name="change_fields",nullable = true, columnDefinition = "TEXT")
+    private String changedFields; // Campos e valores alterados
+    @Column(nullable = false)
     @ManyToOne
     @JoinColumn(name="user", nullable = false)
     private User user;
@@ -39,20 +38,12 @@ public class LogUpdate {
         this.user = user;
     }
 
-    public LocalTime getLogTime() {
-        return logTime;
+    public LocalDateTime getLogDateTime() {
+        return logDateTime;
     }
 
-    public void setLogTime(LocalTime logTime) {
-        this.logTime = logTime;
-    }
-
-    public LocalDate getLogDate() {
-        return logDate;
-    }
-
-    public void setLogDate(LocalDate logDate) {
-        this.logDate = logDate;
+    public void setLogDateTime(LocalDateTime logDateTime) {
+        this.logDateTime = logDateTime;
     }
 
     public String getAction() {
@@ -61,5 +52,13 @@ public class LogUpdate {
 
     public void setAction(String action) {
         this.action = action;
+    }
+
+    public String getChangedFields() {
+        return changedFields;
+    }
+
+    public void setChangedFields(String changedFields) {
+        this.changedFields = changedFields;
     }
 }
