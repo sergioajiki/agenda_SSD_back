@@ -1,6 +1,6 @@
 package com.ssd.agenda_SSD_back.service;
 
-import com.ssd.agenda_SSD_back.UserRepository;
+import com.ssd.agenda_SSD_back.repository.UserRepository;
 import com.ssd.agenda_SSD_back.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

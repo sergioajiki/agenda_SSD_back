@@ -1,4 +1,4 @@
-package com.ssd.agenda_SSD_back;
+package com.ssd.agenda_SSD_back.repository;
 
 import com.ssd.agenda_SSD_back.entity.User;
 import org.springframework.stereotype.Repository;
