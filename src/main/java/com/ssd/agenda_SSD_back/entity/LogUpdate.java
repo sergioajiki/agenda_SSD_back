@@ -8,7 +8,7 @@ import java.time.LocalTime;
 
 @Entity
 @Table(name="log")
-public class LogUpadate {
+public class LogUpdate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
