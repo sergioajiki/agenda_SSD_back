@@ -16,15 +16,10 @@ public class LodUpdateDto {
     private String changedFields;
     @Schema(description = "Data da alteração")
     private LocalDateTime logDateTime;
-
-    // ID do usuário (sem vínculo de chave estrangeira, para manter as informações do log após a exclusão do usuário)
-    // @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @Schema(description = "Usuário responsável pela atualização")
     private User updatedBy;
-
-    // ID da reunião (sem vínculo de chave estrangeira, para manter as informações do log após a exclusão da reunião)
-    @JoinColumn(name = "meeting_id", nullable = true)
-    private Long meetingId; // Tarefa associada à alteração
+    @Schema(description = "Id da reunião")
+    private Long meetingId;
 
     public Long getId() {
         return id;
@@ -42,20 +37,20 @@ public class LodUpdateDto {
         this.meetingId = meetingId;
     }
 
-    public User getUpdatedBy() {
-        return updatedBy;
-    }
-
-    public void setUpdatedBy(User updatedBy) {
-        this.updatedBy = updatedBy;
-    }
-
     public LocalDateTime getLogDateTime() {
         return logDateTime;
     }
 
     public void setLogDateTime(LocalDateTime logDateTime) {
         this.logDateTime = logDateTime;
+    }
+
+    public User getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(User updatedBy) {
+        this.updatedBy = updatedBy;
     }
 
     public String getChangedFields() {

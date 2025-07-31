@@ -17,10 +17,15 @@ public class LogUpdate {
     private LocalDateTime logDateTime;
     @Column(name="change_fields",nullable = true, columnDefinition = "TEXT")
     private String changedFields; // Campos e valores alterados
-    @Column(nullable = false)
-    @ManyToOne
-    @JoinColumn(name="user", nullable = false)
-    private User user;
+
+    // ID do usuário (sem vínculo de chave estrangeira, para manter as informações do log após a exclusão do usuário)
+    // @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User updatedBy;
+
+    // ID da reunião (sem vínculo de chave estrangeira, para manter as informações do log após a exclusão da reunião)
+    @JoinColumn(name = "meeting_id", nullable = true)
+    private Long meetingId; // Tarefa associada à alteração
 
     public Long getId() {
         return id;
@@ -30,12 +35,28 @@ public class LogUpdate {
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
+    public Long getMeetingId() {
+        return meetingId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setMeetingId(Long meetingId) {
+        this.meetingId = meetingId;
+    }
+
+    public String getChangedFields() {
+        return changedFields;
+    }
+
+    public void setChangedFields(String changedFields) {
+        this.changedFields = changedFields;
+    }
+
+    public User getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(User updatedBy) {
+        this.updatedBy = updatedBy;
     }
 
     public LocalDateTime getLogDateTime() {
@@ -54,11 +75,4 @@ public class LogUpdate {
         this.action = action;
     }
 
-    public String getChangedFields() {
-        return changedFields;
-    }
-
-    public void setChangedFields(String changedFields) {
-        this.changedFields = changedFields;
-    }
 }
