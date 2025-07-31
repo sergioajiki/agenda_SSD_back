@@ -1,12 +1,15 @@
 package com.ssd.agenda_SSD_back.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.ssd.agenda_SSD_back.entity.Meeting;
+import com.ssd.agenda_SSD_back.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 public class MeetingDto {
@@ -83,5 +86,27 @@ public class MeetingDto {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public static Meeting toEntity (MeetingDto meetingDto, User user){
+        Meeting meeting = new Meeting();
+        meeting.setTitle(meetingDto.getTitle());
+        meeting.setMeetingDate(meetingDto.getMeetingDate());
+        meeting.setTimeStart(meetingDto.getTimeStart());
+        meeting.setTimeEnd(meetingDto.getTimeEnd());
+        meeting.setUpdateDate(LocalDateTime.now()); // Define a data de criação/atualização
+        meeting.setHostUser(user);
+        return meeting;
+    }
+
+    public static MeetingDto fromEntity(Meeting meeting){
+        MeetingDto meetingDto = new MeetingDto();
+        meetingDto.setId(meeting.getId());
+        meetingDto.setTitle(meeting.getTitle());
+        meetingDto.setMeetingDate(meeting.getMeetingDate());
+        meetingDto.setTimeStart(meeting.getTimeStart());
+        meetingDto.setTimeEnd(meeting.getTimeEnd());
+        meetingDto.setUserId(meeting.getHostUser().getId());
+        return meetingDto;
     }
 }

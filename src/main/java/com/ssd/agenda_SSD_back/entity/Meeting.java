@@ -50,12 +50,12 @@ public class Meeting {
         this.updateDate = updateDate;
     }
 
-    public LocalDate getMeetDate() {
+    public LocalDate getMeetingDate() {
         return meetingDate;
     }
 
-    public void setMeetDate(LocalDate meetDate) {
-        this.meetingDate = meetDate;
+    public void setMeetingDate(LocalDate meetingDate) {
+        this.meetingDate = meetingDate;
     }
 
     public LocalTime getTimeStart() {
