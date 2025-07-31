@@ -16,14 +16,14 @@ public class Meeting {
     @Column (name="update_date", nullable = false)
     private LocalDateTime updateDate;
     @Column(name="meet_date", nullable = false)
-    private LocalDate meetDate; // Data no formato yyyy-MM-dd
+    private LocalDate meetingDate; // Data no formato yyyy-MM-dd
     @Column(name="time_start", nullable = false)
     private LocalTime timeStart; // Horário (hh:mm)
     @Column(name="time_end", nullable = false)
     private LocalTime timeEnd; // Horário (hh:mm)
 
     @ManyToOne
-    @JoinColumn(name="host_user", nullable = false)
+    @JoinColumn(name="user_id", nullable = false)
     private User hostUser;
 
     public Long getId() {
@@ -51,11 +51,11 @@ public class Meeting {
     }
 
     public LocalDate getMeetDate() {
-        return meetDate;
+        return meetingDate;
     }
 
     public void setMeetDate(LocalDate meetDate) {
-        this.meetDate = meetDate;
+        this.meetingDate = meetDate;
     }
 
     public LocalTime getTimeStart() {

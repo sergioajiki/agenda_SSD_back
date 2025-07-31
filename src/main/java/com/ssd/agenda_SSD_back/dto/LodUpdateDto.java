@@ -2,8 +2,6 @@ package com.ssd.agenda_SSD_back.dto;
 
 import com.ssd.agenda_SSD_back.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 
 import java.time.LocalDateTime;
 
