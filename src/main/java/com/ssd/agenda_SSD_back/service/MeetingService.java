@@ -8,7 +8,6 @@ import com.ssd.agenda_SSD_back.repository.MeetingRepository;
 import com.ssd.agenda_SSD_back.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PutMapping;
 
 import java.util.List;
 
@@ -76,8 +75,5 @@ public class MeetingService {
     public List<Meeting> findAllMeetings(){
         return meetingRepository.findAll();
     }
-
-
-
 
 }
