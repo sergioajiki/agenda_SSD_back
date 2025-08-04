@@ -36,6 +36,10 @@ public class MeetingDto {
     @JsonFormat(pattern = "HH:mm") // Formato para o horário
     private LocalTime timeEnd;
 
+    @Schema(description = "Local da reunião")
+    @NotNull(message = "Necessário informar a sala de reunião")
+    private String meetingRoom;
+
     @Schema(description = "ID do usuário responsável pela reunião")
     @NotNull(message = "O ID do usuário responsável é obrigatório.")
     private Long userId;
@@ -80,6 +84,14 @@ public class MeetingDto {
         this.timeEnd = timeEnd;
     }
 
+    public String getMeetingRoom() {
+        return meetingRoom;
+    }
+
+    public void setMeetingRoom(String meetingRoom) {
+        this.meetingRoom = meetingRoom;
+    }
+
     public Long getUserId() {
         return userId;
     }
@@ -95,6 +107,7 @@ public class MeetingDto {
         meeting.setTimeStart(meetingDto.getTimeStart());
         meeting.setTimeEnd(meetingDto.getTimeEnd());
         meeting.setUpdateDate(LocalDateTime.now()); // Define a data de criação/atualização
+        meeting.setMeetingRoom(meeting.getMeetingRoom());
         meeting.setHostUser(user);
         return meeting;
     }
@@ -106,6 +119,7 @@ public class MeetingDto {
         meetingDto.setMeetingDate(meeting.getMeetingDate());
         meetingDto.setTimeStart(meeting.getTimeStart());
         meetingDto.setTimeEnd(meeting.getTimeEnd());
+        meetingDto.setMeetingRoom(meeting.getMeetingRoom());
         meetingDto.setUserId(meeting.getHostUser().getId());
         return meetingDto;
     }

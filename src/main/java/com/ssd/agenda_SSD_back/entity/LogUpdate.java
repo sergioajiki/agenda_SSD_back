@@ -16,6 +16,8 @@ public class LogUpdate {
     private LocalDateTime logDateTime;
     @Column(name = "change_fields", nullable = true, columnDefinition = "TEXT")
     private String changedFields; // Campos e valores alterados
+    @Column(name = "meeting_room", nullable = false)
+    private String meetingRoom;
 
     // ID do usuário (sem vínculo de chave estrangeira, para manter as informações do log após a exclusão do usuário)
     @ManyToOne
@@ -32,6 +34,14 @@ public class LogUpdate {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getMeetingRoom() {
+        return meetingRoom;
+    }
+
+    public void setMeetingRoom(String meetingRoom) {
+        this.meetingRoom = meetingRoom;
     }
 
     public Long getMeetingId() {
@@ -73,5 +83,7 @@ public class LogUpdate {
     public void setAction(String action) {
         this.action = action;
     }
+
+
 
 }

@@ -22,6 +22,8 @@ public class Meeting {
     private LocalTime timeStart; // Horário (hh:mm)
     @Column(name = "time_end", nullable = false)
     private LocalTime timeEnd; // Horário (hh:mm)
+    @Column(name = "meeting_room", nullable = false)
+    private String meetingRoom;
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User hostUser;
@@ -72,6 +74,14 @@ public class Meeting {
 
     public void setTimeEnd(LocalTime timeEnd) {
         this.timeEnd = timeEnd;
+    }
+
+    public String getMeetingRoom() {
+        return meetingRoom;
+    }
+
+    public void setMeetingRoom(String meetingRoom) {
+        this.meetingRoom = meetingRoom;
     }
 
     public User getHostUser() {
