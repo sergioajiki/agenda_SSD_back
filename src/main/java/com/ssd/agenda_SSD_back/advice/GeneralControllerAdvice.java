@@ -1,9 +1,11 @@
 package com.ssd.agenda_SSD_back.advice;
 
+import com.ssd.agenda_SSD_back.exception.BusinessRuleException;
 import com.ssd.agenda_SSD_back.exception.DuplicateEntryException;
+import com.ssd.agenda_SSD_back.exception.InvalidEmailFormatException;
+import com.ssd.agenda_SSD_back.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -18,7 +20,7 @@ public class GeneralControllerAdvice {
     }
 
     @ExceptionHandler
-    public ResponseEntity<Problem> handleNotFoundException(ChangeSetPersister.NotFoundException exception) {
+    public ResponseEntity<Problem> handleNotFoundException(NotFoundException exception) {
         Problem problem = new Problem(
                 HttpStatus.BAD_REQUEST.value(),
                 "Invalid Request Info",
@@ -37,5 +39,27 @@ public class GeneralControllerAdvice {
                 null
         );
         return ResponseEntity.status(HttpStatus.CONFLICT).body(problem);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<Problem> handleInvalidEmailFormatException(InvalidEmailFormatException exception) {
+        Problem problem = new Problem(
+                HttpStatus.BAD_REQUEST.value(),
+                "Invalid Email Format",
+                exception.getMessage(),
+                null
+        );
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problem);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<Problem> handleBusinessRuleExceptions(BusinessRuleException exception) {
+        Problem problem = new Problem(
+                HttpStatus.BAD_REQUEST.value(),
+                "Invalid Business Rule",
+                exception.getMessage(),
+                null
+        );
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problem);
     }
 }
