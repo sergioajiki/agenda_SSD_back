@@ -83,7 +83,4 @@ public class LogUpdate {
     public void setAction(String action) {
         this.action = action;
     }
-
-
-
 }
