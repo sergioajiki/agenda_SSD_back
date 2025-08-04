@@ -12,7 +12,7 @@ public class LogUpdate {
     private Long id;
     @Column(name = "action", nullable = false)
     private String action; // Ações: CREATE, UPDATE, DELETE
-    @Column(name = "log_date", nullable = false)
+    @Column(name = "log_date_time", nullable = false)
     private LocalDateTime logDateTime;
     @Column(name = "change_fields", nullable = true, columnDefinition = "TEXT")
     private String changedFields; // Campos e valores alterados

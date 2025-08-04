@@ -13,7 +13,7 @@ public interface LogUpdateRepository extends JpaRepository<LogUpdate, Long> {
     //Busca pro tarefa
     List<LogUpdate> findByMeetingId(Long meeting);
     // Busca por intervalo de tempo
-    List<LogUpdate> findByUpdateDateTimeBetween(LocalDateTime start, LocalDateTime end );
+    List<LogUpdate> findByLogDateTimeBetween(LocalDateTime start, LocalDateTime end );
     //Busca por usuário
     List<LogUpdate> findByUpdatedBy(User user);
 }

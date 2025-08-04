@@ -40,7 +40,7 @@ public class LogUpdateService {
 
     // Buscar os logs por período
     public List<LogUpdate> getLogsByPeriod(LocalDateTime start, LocalDateTime end) {
-        return logUpdateRepository.findByUpdateDateTimeBetween(start, end);
+        return logUpdateRepository.findByLogDateTimeBetween(start, end);
     }
 
     // Buscar os logs por usuário
