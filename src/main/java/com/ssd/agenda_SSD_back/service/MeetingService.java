@@ -1,7 +1,5 @@
 package com.ssd.agenda_SSD_back.service;
 
-
-import com.ssd.agenda_SSD_back.dto.LogUpdateDto;
 import com.ssd.agenda_SSD_back.dto.MeetingDto;
 import com.ssd.agenda_SSD_back.entity.LogUpdate;
 import com.ssd.agenda_SSD_back.entity.Meeting;
