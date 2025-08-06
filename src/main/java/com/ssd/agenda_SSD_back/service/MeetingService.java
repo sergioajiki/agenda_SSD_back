@@ -9,6 +9,7 @@ import com.ssd.agenda_SSD_back.entity.User;
 import com.ssd.agenda_SSD_back.repository.LogUpdateRepository;
 import com.ssd.agenda_SSD_back.repository.MeetingRepository;
 import com.ssd.agenda_SSD_back.repository.UserRepository;
+import com.ssd.agenda_SSD_back.util.LogUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,6 +44,9 @@ public class MeetingService {
     public void deleteMeeting(Long id) {
         Meeting existingMeeting = meetingRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Reunião não encontrada com ID: " + id));
+
+        // Registra Log de exclusão
+        registerLog("DELETE", null, existingMeeting.getId(), existingMeeting.getMeetingRoom(), existingMeeting.getHostUser());
         meetingRepository.delete(existingMeeting);
     }
 
@@ -73,15 +77,19 @@ public class MeetingService {
         // Validar sobreposição de horários
 
         // Verificar Mudanças
+        Map<String, String> changes = LogUtils.getChangeFields(existingMeeting, updatedMeeting);
 
         // Atualizar os dados da reunião
-
         existingMeeting.setTitle(updatedMeeting.getTitle());
         existingMeeting.setUpdateDate(updatedMeeting.getUpdateDate());
         existingMeeting.setMeetingDate(updatedMeeting.getMeetingDate());
         existingMeeting.setTimeStart(updatedMeeting.getTimeStart());
         existingMeeting.setTimeEnd(updatedMeeting.getTimeEnd());
         existingMeeting.setHostUser(updatedMeeting.getHostUser());
+
+        // Registra Log de atualização
+        registerLog("UPDATE", changes, existingMeeting.getId(), existingMeeting.getMeetingRoom(), existingMeeting.getHostUser());
+
         return meetingRepository.save(existingMeeting);
     }
 
