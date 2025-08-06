@@ -107,7 +107,7 @@ public class MeetingDto {
         meeting.setTimeStart(meetingDto.getTimeStart());
         meeting.setTimeEnd(meetingDto.getTimeEnd());
         meeting.setUpdateDate(LocalDateTime.now()); // Define a data de criação/atualização
-        meeting.setMeetingRoom(meeting.getMeetingRoom());
+        meeting.setMeetingRoom(meetingDto.getMeetingRoom());
         meeting.setHostUser(user);
         return meeting;
     }
