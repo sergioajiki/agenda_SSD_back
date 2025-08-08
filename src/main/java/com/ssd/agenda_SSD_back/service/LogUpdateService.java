@@ -27,24 +27,34 @@ public class LogUpdateService {
     // Buscar todos os logs
     public List<LogUpdateDto> getAllLogs() {
         List<LogUpdate> logs = logUpdateRepository.findAll();
-
         return logs.stream()
                 .map(LogUpdateDto::fromEntity)
                 .toList();
     }
 
     // Buscar os logs por titulo
-    public List<LogUpdate> getLogsByMeetingId(Long meeting) {
-        return logUpdateRepository.findByMeetingId(meeting);
+    public List<LogUpdateDto> getLogsByMeetingId(Long meeting) {
+
+        List<LogUpdate> log = logUpdateRepository.findByMeetingId(meeting);
+        return log.stream()
+                .map(LogUpdateDto::fromEntity)
+                .toList();
     }
 
     // Buscar os logs por período
-    public List<LogUpdate> getLogsByPeriod(LocalDateTime start, LocalDateTime end) {
-        return logUpdateRepository.findByLogDateTimeBetween(start, end);
+    public List<LogUpdateDto> getLogsByPeriod(LocalDateTime start, LocalDateTime end) {
+        List<LogUpdate> logs = logUpdateRepository.findByLogDateTimeBetween(start, end);
+
+        return logs.stream()
+                .map(LogUpdateDto::fromEntity)
+                .toList();
     }
 
     // Buscar os logs por usuário
-    public List<LogUpdate> getLogsByUser(User user) {
-        return logUpdateRepository.findByUpdatedBy(user);
+    public List<LogUpdateDto> getLogsByUser(User user) {
+        List<LogUpdate> logs = logUpdateRepository.findByUpdatedBy(user);
+        return logs.stream()
+                .map(LogUpdateDto::fromEntity)
+                .toList();
     }
 }

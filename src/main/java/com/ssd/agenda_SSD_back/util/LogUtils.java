@@ -25,10 +25,10 @@ public class LogUtils {
                 if (oldValue == null && newValue == null) {
                     continue;
                 }
-                if (oldValue == null || newValue == null || !oldValue.equals(newObject)) {
+                if (oldValue == null || newValue == null || !oldValue.equals(newValue)) {
                     // Adiciona a mudança no mapa no formato: "campo: valor_antigo -> valor_novo"
                     changes.put(field.getName(), (oldValue == null ? "null" : oldValue.toString()) + " -> " +
-                            (newValue == null ? "null" : newObject.toString()));
+                            (newValue == null ? "null" : newValue.toString()));
                 }
             } catch (IllegalAccessException e) {
                 throw new RuntimeException("Erro ao acessar o campo: " + field.getName(), e);
