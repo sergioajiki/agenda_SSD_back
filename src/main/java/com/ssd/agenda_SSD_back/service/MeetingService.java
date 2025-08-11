@@ -4,6 +4,7 @@ import com.ssd.agenda_SSD_back.dto.MeetingDto;
 import com.ssd.agenda_SSD_back.entity.LogUpdate;
 import com.ssd.agenda_SSD_back.entity.Meeting;
 import com.ssd.agenda_SSD_back.entity.User;
+import com.ssd.agenda_SSD_back.exception.NotFoundException;
 import com.ssd.agenda_SSD_back.repository.LogUpdateRepository;
 import com.ssd.agenda_SSD_back.repository.MeetingRepository;
 import com.ssd.agenda_SSD_back.repository.UserRepository;
@@ -28,8 +29,20 @@ public class MeetingService {
 
     // Criar função para Salvar meeting
     public Meeting saveMeeting(MeetingDto meetingDto) {
-        User user = userRepository.findById(meetingDto.getUserId()).orElseThrow(() -> new RuntimeException("Usuário não encontrado com ID: " + meetingDto.getUserId()));
+        User user = userRepository.findById(meetingDto.getUserId()).orElseThrow(() -> new NotFoundException("Usuário não encontrado com ID: " + meetingDto.getUserId()));
         Meeting meeting = MeetingDto.toEntity(meetingDto, user);
+
+        //Valida sobreposição
+        boolean overlaps = meetingRepository.existOverlappingMeeting(
+                meeting.getMeetingDate(),
+                meeting.getMeetingRoom(),
+                meeting.getTimeStart(),
+                meeting.getTimeEnd()
+        );
+
+        if (overlaps) {
+            throw new RuntimeException("Já existe uma reunião nesta sala e horário");
+        }
         Meeting savedMeeting = meetingRepository.save(meeting);
 
         // Registrar log de criação
@@ -41,7 +54,7 @@ public class MeetingService {
     // Criar função para Apagar meeting
     public void deleteMeeting(Long id) {
         Meeting existingMeeting = meetingRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Reunião não encontrada com ID: " + id));
+                .orElseThrow(() -> new NotFoundException("Reunião não encontrada com ID: " + id));
 
         // Registra Log de exclusão
         registerLog("DELETE", null, existingMeeting.getId(), existingMeeting.getMeetingRoom(), existingMeeting.getHostUser());
@@ -51,7 +64,7 @@ public class MeetingService {
     // Criar função para Encontrar meeting por Id
     public MeetingDto findMeetingById(Long id) {
         Meeting meeting = meetingRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Reunião não encontrada com ID: " + id));
+                .orElseThrow(() -> new NotFoundException("Reunião não encontrada com ID: " + id));
         return MeetingDto.fromEntity(meeting);
     }
 
@@ -65,14 +78,25 @@ public class MeetingService {
     public Meeting updateMeeting(Long id, MeetingDto meetingDto) {
         // Busca reunião existente
         Meeting existingMeeting = meetingRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Reunião não encontrada com ID: " + id));
+                .orElseThrow(() -> new NotFoundException("Reunião não encontrada com ID: " + id));
 
         User user = userRepository.findById(meetingDto.getUserId())
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado com ID: " + id));
+                .orElseThrow(() -> new NotFoundException("Usuário não encontrado com ID: " + id));
 
         Meeting updatedMeeting = MeetingDto.toEntity(meetingDto, user);
 
         // Validar sobreposição de horários
+        boolean overlaps = meetingRepository.existsOverlappingMeetingExcludingId(
+                updatedMeeting.getMeetingDate(),
+                updatedMeeting.getMeetingRoom(),
+                updatedMeeting.getTimeStart(),
+                updatedMeeting.getTimeEnd(),
+                existingMeeting.getId()
+        );
+        if (overlaps) {
+            throw new RuntimeException("já existe uma reunião nesta sala e horário");
+        }
+
 
         // Verificar Mudanças
         Map<String, String> changes = LogUtils.getChangeFields(existingMeeting, updatedMeeting);
