@@ -4,7 +4,9 @@ import com.ssd.agenda_SSD_back.dto.MeetingDto;
 import com.ssd.agenda_SSD_back.entity.LogUpdate;
 import com.ssd.agenda_SSD_back.entity.Meeting;
 import com.ssd.agenda_SSD_back.entity.User;
+import com.ssd.agenda_SSD_back.exception.BusinessRuleException;
 import com.ssd.agenda_SSD_back.exception.NotFoundException;
+import com.ssd.agenda_SSD_back.exception.ScheduleOverlapException;
 import com.ssd.agenda_SSD_back.repository.LogUpdateRepository;
 import com.ssd.agenda_SSD_back.repository.MeetingRepository;
 import com.ssd.agenda_SSD_back.repository.UserRepository;
@@ -29,19 +31,24 @@ public class MeetingService {
 
     // Criar função para Salvar meeting
     public Meeting saveMeeting(MeetingDto meetingDto) {
+        // Validação: hora inicial < hora final
+        if(!meetingDto.getTimeStart().isBefore(meetingDto.getTimeEnd())){
+            throw new BusinessRuleException("O horário de início deve ser antes do horário de término");
+        }
+
         User user = userRepository.findById(meetingDto.getUserId()).orElseThrow(() -> new NotFoundException("Usuário não encontrado com ID: " + meetingDto.getUserId()));
         Meeting meeting = MeetingDto.toEntity(meetingDto, user);
 
         //Valida sobreposição
-        boolean overlaps = meetingRepository.existOverlappingMeeting(
+        boolean hasConflit = meetingRepository.existOverlappingMeeting(
                 meeting.getMeetingDate(),
                 meeting.getMeetingRoom(),
                 meeting.getTimeStart(),
                 meeting.getTimeEnd()
         );
 
-        if (overlaps) {
-            throw new RuntimeException("Já existe uma reunião nesta sala e horário");
+        if (hasConflit) {
+            throw new ScheduleOverlapException("Já existe uma reunião nesta sala e horário");
         }
         Meeting savedMeeting = meetingRepository.save(meeting);
 
@@ -81,22 +88,25 @@ public class MeetingService {
                 .orElseThrow(() -> new NotFoundException("Reunião não encontrada com ID: " + id));
 
         User user = userRepository.findById(meetingDto.getUserId())
-                .orElseThrow(() -> new NotFoundException("Usuário não encontrado com ID: " + id));
+                .orElseThrow(() -> new NotFoundException("Usuário não encontrado com ID: " + meetingDto.getUserId()));
 
         Meeting updatedMeeting = MeetingDto.toEntity(meetingDto, user);
 
+        if(!meetingDto.getTimeStart().isBefore(meetingDto.getTimeEnd())){
+            throw new BusinessRuleException("O horário de início deve ser antes do horário de término");
+        }
+
         // Validar sobreposição de horários
-        boolean overlaps = meetingRepository.existsOverlappingMeetingExcludingId(
+        boolean hasConflit = meetingRepository.existsOverlappingMeetingExcludingId(
                 updatedMeeting.getMeetingDate(),
                 updatedMeeting.getMeetingRoom(),
                 updatedMeeting.getTimeStart(),
                 updatedMeeting.getTimeEnd(),
                 existingMeeting.getId()
         );
-        if (overlaps) {
-            throw new RuntimeException("já existe uma reunião nesta sala e horário");
+        if (hasConflit) {
+            throw new ScheduleOverlapException("já existe uma reunião nesta sala e horário");
         }
-
 
         // Verificar Mudanças
         Map<String, String> changes = LogUtils.getChangeFields(existingMeeting, updatedMeeting);

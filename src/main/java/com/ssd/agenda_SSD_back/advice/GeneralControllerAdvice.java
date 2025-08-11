@@ -1,10 +1,7 @@
 package com.ssd.agenda_SSD_back.advice;
 
 import com.ssd.agenda_SSD_back.dto.ErrorMessageDto;
-import com.ssd.agenda_SSD_back.exception.BusinessRuleException;
-import com.ssd.agenda_SSD_back.exception.DuplicateEntryException;
-import com.ssd.agenda_SSD_back.exception.InvalidEmailFormatException;
-import com.ssd.agenda_SSD_back.exception.NotFoundException;
+import com.ssd.agenda_SSD_back.exception.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -87,6 +84,17 @@ public class GeneralControllerAdvice {
                 "Invalid Parameters",
                 "Invalid Request Body",
                 problemList
+        );
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problem);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<Problem> handleScheduleOverlapException(ScheduleOverlapException exception) {
+        Problem problem = new Problem(
+                HttpStatus.BAD_REQUEST.value(),
+                "Invalid Request Info",
+                exception.getLocalizedMessage(),
+                null
         );
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problem);
     }
