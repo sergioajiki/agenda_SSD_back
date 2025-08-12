@@ -83,6 +83,11 @@ public class MeetingService {
 
     // Atualizar reuniões
     public Meeting updateMeeting(Long id, MeetingDto meetingDto) {
+        // Validação: hora inicial < hora final
+        if(!meetingDto.getTimeStart().isBefore(meetingDto.getTimeEnd())){
+            throw new BusinessRuleException("O horário de início deve ser antes do horário de término");
+        }
+
         // Busca reunião existente
         Meeting existingMeeting = meetingRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Reunião não encontrada com ID: " + id));
@@ -91,10 +96,8 @@ public class MeetingService {
                 .orElseThrow(() -> new NotFoundException("Usuário não encontrado com ID: " + meetingDto.getUserId()));
 
         Meeting updatedMeeting = MeetingDto.toEntity(meetingDto, user);
-
-        if(!meetingDto.getTimeStart().isBefore(meetingDto.getTimeEnd())){
-            throw new BusinessRuleException("O horário de início deve ser antes do horário de término");
-        }
+        // Ajustar ID para comparação correta e consistência
+        updatedMeeting.setId(existingMeeting.getId());
 
         // Validar sobreposição de horários
         boolean hasConflit = meetingRepository.existsOverlappingMeetingExcludingId(
@@ -117,6 +120,7 @@ public class MeetingService {
         existingMeeting.setMeetingDate(updatedMeeting.getMeetingDate());
         existingMeeting.setTimeStart(updatedMeeting.getTimeStart());
         existingMeeting.setTimeEnd(updatedMeeting.getTimeEnd());
+        existingMeeting.setMeetingRoom(updatedMeeting.getMeetingRoom());
         existingMeeting.setHostUser(updatedMeeting.getHostUser());
 
         // Registra Log de atualização

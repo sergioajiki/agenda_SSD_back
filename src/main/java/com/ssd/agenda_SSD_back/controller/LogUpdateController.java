@@ -37,12 +37,6 @@ public final class LogUpdateController {
         return logUpdateService.getLogsByMeetingId(meetingId);
     }
 
-//    @GetMapping("/period")
-//    @Operation(summary = "Lista os logs por um periodo")
-//    public List<LogUpdateDto> getLogsByPeriod(@RequestParam LocalDateTime start, @RequestParam LocalDateTime end) {
-//        return logUpdateService.getLogsByPeriod(start, end);
-//    }
-
     @GetMapping("/period")
     @Operation(summary = "Lista os logs por um período de data e hora")
     public List<LogUpdateDto> getLogsByPeriod(
