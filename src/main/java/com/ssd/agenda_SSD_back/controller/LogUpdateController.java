@@ -9,7 +9,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
 import javax.lang.model.element.Name;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @CrossOrigin
@@ -35,10 +37,21 @@ public final class LogUpdateController {
         return logUpdateService.getLogsByMeetingId(meetingId);
     }
 
+//    @GetMapping("/period")
+//    @Operation(summary = "Lista os logs por um periodo")
+//    public List<LogUpdateDto> getLogsByPeriod(@RequestParam LocalDateTime start, @RequestParam LocalDateTime end) {
+//        return logUpdateService.getLogsByPeriod(start, end);
+//    }
+
     @GetMapping("/period")
-    @Operation(summary = "Lista os logs por um periodo")
-    public List<LogUpdateDto> getLogsByPeriod(@RequestParam LocalDateTime start, @RequestParam LocalDateTime end) {
-        return logUpdateService.getLogsByPeriod(start, end);
+    @Operation(summary = "Lista os logs por um período de data e hora")
+    public List<LogUpdateDto> getLogsByPeriod(
+            @RequestParam LocalDate startDate,
+            @RequestParam(required = false) LocalTime startTime,
+            @RequestParam(required = false) LocalDate endDate,
+            @RequestParam(required = false) LocalTime endTime
+    ) {
+        return logUpdateService.getLogsByPeriod(startDate, startTime, endDate, endTime);
     }
 
     @GetMapping("/user/{userId}")

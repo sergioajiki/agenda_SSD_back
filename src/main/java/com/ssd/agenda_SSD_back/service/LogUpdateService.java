@@ -7,7 +7,9 @@ import com.ssd.agenda_SSD_back.repository.LogUpdateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -42,8 +44,28 @@ public class LogUpdateService {
     }
 
     // Buscar os logs por período
-    public List<LogUpdateDto> getLogsByPeriod(LocalDateTime start, LocalDateTime end) {
-        List<LogUpdate> logs = logUpdateRepository.findByLogDateTimeBetween(start, end);
+//    public List<LogUpdateDto> getLogsByPeriod(LocalDateTime start, LocalDateTime end) {
+//        List<LogUpdate> logs = logUpdateRepository.findByLogDateTimeBetween(start, end);
+//
+//        return logs.stream()
+//                .map(LogUpdateDto::fromEntity)
+//                .toList();
+//    }
+    public List<LogUpdateDto> getLogsByPeriod(
+            LocalDate startDate, LocalTime startTime,
+            LocalDate endDate, LocalTime endTime
+    ) {
+        // Se endDate não for informado, usar startDate
+        LocalDate safeEndDate = (endDate != null) ? endDate : startDate;
+
+        // Se hora não for informada, usar início ou fim do dia
+        LocalTime safeStartTime = (startTime != null) ? startTime : LocalTime.MIN;
+        LocalTime safeEndTime = (endTime != null) ? endTime : LocalTime.MAX;
+
+        LocalDateTime startDateTime = LocalDateTime.of(startDate, safeStartTime);
+        LocalDateTime endDateTime = LocalDateTime.of(safeEndDate, safeEndTime);
+
+        List<LogUpdate> logs = logUpdateRepository.findByLogDateTimeBetween(startDateTime, endDateTime);
 
         return logs.stream()
                 .map(LogUpdateDto::fromEntity)

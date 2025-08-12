@@ -91,5 +91,4 @@ public class MeetingController {
         MeetingDto meetingDto = meetingService.findMeetingById(id);
         return ResponseEntity.ok(meetingDto);
     }
-
 }
