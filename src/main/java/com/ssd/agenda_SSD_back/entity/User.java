@@ -1,5 +1,6 @@
 package com.ssd.agenda_SSD_back.entity;
 
+import com.ssd.agenda_SSD_back.enums.UserRole;
 import jakarta.persistence.*;
 
 @Entity
@@ -16,6 +17,9 @@ public class User {
     private String password;
     @Column(nullable = false)
     private Long matricula;
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
 
     public Long getId() {
         return id;
@@ -55,5 +59,13 @@ public class User {
 
     public void setMatricula(Long matricula) {
         this.matricula = matricula;
+    }
+
+    public UserRole getRole() {
+        return role;
+    }
+
+    public void setRole(UserRole role) {
+        this.role = role;
     }
 }

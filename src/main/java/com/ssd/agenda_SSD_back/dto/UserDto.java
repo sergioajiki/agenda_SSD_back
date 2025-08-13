@@ -1,6 +1,7 @@
 package com.ssd.agenda_SSD_back.dto;
 
 import com.ssd.agenda_SSD_back.entity.User;
+import com.ssd.agenda_SSD_back.enums.UserRole;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -17,6 +18,8 @@ public class UserDto {
     private String password;
     @Schema(description = "Matrícula do usuário")
     private Long matricula;
+    @Schema(description = "Tipo acesso do usuário")
+    private UserRole role;
 
     public String getName() {
         return name;
@@ -50,12 +53,21 @@ public class UserDto {
         this.matricula = matricula;
     }
 
+    public UserRole getRole() {
+        return role;
+    }
+
+    public void setRole(UserRole role) {
+        this.role = role;
+    }
+
     public static User toEntity(UserDto userDto) {
         User user = new User();
         user.setName(userDto.getName());
         user.setEmail(userDto.getEmail());
         user.setPassword(userDto.getPassword()); //Será criptografada no Service
         user.setMatricula(userDto.getMatricula());
+        user.setRole(userDto.getRole());
         return user;
     }
 }
