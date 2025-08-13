@@ -4,6 +4,7 @@ import com.ssd.agenda_SSD_back.dto.MeetingDto;
 import com.ssd.agenda_SSD_back.entity.LogUpdate;
 import com.ssd.agenda_SSD_back.entity.Meeting;
 import com.ssd.agenda_SSD_back.entity.User;
+import com.ssd.agenda_SSD_back.enums.UserRole;
 import com.ssd.agenda_SSD_back.exception.BusinessRuleException;
 import com.ssd.agenda_SSD_back.exception.NotFoundException;
 import com.ssd.agenda_SSD_back.exception.ScheduleOverlapException;
@@ -32,7 +33,7 @@ public class MeetingService {
     // Criar função para Salvar meeting
     public Meeting saveMeeting(MeetingDto meetingDto) {
         // Validação: hora inicial < hora final
-        if(!meetingDto.getTimeStart().isBefore(meetingDto.getTimeEnd())){
+        if (!meetingDto.getTimeStart().isBefore(meetingDto.getTimeEnd())) {
             throw new BusinessRuleException("O horário de início deve ser antes do horário de término");
         }
 
@@ -59,10 +60,11 @@ public class MeetingService {
     }
 
     // Criar função para Apagar meeting
-    public void deleteMeeting(Long id) {
+    public void deleteMeeting(Long id, Long requestingUserId) {
         Meeting existingMeeting = meetingRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Reunião não encontrada com ID: " + id));
-
+        // Verifica permissão
+        verificarPermissao(existingMeeting, requestingUserId);
         // Registra Log de exclusão
         registerLog("DELETE", null, existingMeeting.getId(), existingMeeting.getMeetingRoom(), existingMeeting.getHostUser());
         meetingRepository.delete(existingMeeting);
@@ -82,9 +84,9 @@ public class MeetingService {
     }
 
     // Atualizar reuniões
-    public Meeting updateMeeting(Long id, MeetingDto meetingDto) {
+    public Meeting updateMeeting(Long id, MeetingDto meetingDto, Long requestingUserId) {
         // Validação: hora inicial < hora final
-        if(!meetingDto.getTimeStart().isBefore(meetingDto.getTimeEnd())){
+        if (!meetingDto.getTimeStart().isBefore(meetingDto.getTimeEnd())) {
             throw new BusinessRuleException("O horário de início deve ser antes do horário de término");
         }
 
@@ -94,6 +96,9 @@ public class MeetingService {
 
         User user = userRepository.findById(meetingDto.getUserId())
                 .orElseThrow(() -> new NotFoundException("Usuário não encontrado com ID: " + meetingDto.getUserId()));
+
+        //  Apenas criador ou ADMIN pode alterar
+        verificarPermissao(existingMeeting, requestingUserId);
 
         Meeting updatedMeeting = MeetingDto.toEntity(meetingDto, user);
         // Ajustar ID para comparação correta e consistência
@@ -144,4 +149,17 @@ public class MeetingService {
 
         logUpdateRepository.save(log);
     }
+
+    private void verificarPermissao(Meeting meeting, Long requestingUserId) {
+        User requestingUser = userRepository.findById(requestingUserId)
+                .orElseThrow(() -> new NotFoundException("Usuário solicitante não encontrado com ID: " + requestingUserId));
+
+        boolean isOwner = meeting.getHostUser().getId().equals(requestingUser.getId());
+        boolean isAdmin = requestingUser.getRole() == UserRole.ADMIN;
+
+        if (!isOwner && !isAdmin) {
+            throw new BusinessRuleException("Somente o criador da reunião ou um administrador pode executar esta ação.");
+        }
+    }
+
 }

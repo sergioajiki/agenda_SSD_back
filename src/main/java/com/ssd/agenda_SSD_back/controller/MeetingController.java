@@ -47,8 +47,12 @@ public class MeetingController {
      */
     @PutMapping("/{id}")
     @Operation(summary = "Atualizar uma reunião", description = "Atualiza os dados de uma reunião agendada no sistema")
-    public ResponseEntity<MeetingDto> updateMeeting(@PathVariable Long id, @RequestBody MeetingDto meetingDto) {
-        Meeting updatedMeeting = meetingService.updateMeeting(id, meetingDto);
+    public ResponseEntity<MeetingDto> updateMeeting(
+            @PathVariable Long id,
+            @RequestBody MeetingDto meetingDto,
+            @RequestParam Long requestingUserId // Recebido temporariamente até integrar JWT
+    ) {
+        Meeting updatedMeeting = meetingService.updateMeeting(id, meetingDto, requestingUserId);
         return ResponseEntity.ok(MeetingDto.fromEntity(updatedMeeting));
     }
 
@@ -59,9 +63,14 @@ public class MeetingController {
      */
     @DeleteMapping("/{id}")
     @Operation(summary = "Remover uma reunião", description = "Remove uma reunião agendada no sistema")
-    public ResponseEntity<Void> deleteMeeting(@PathVariable Long id) {
-        meetingService.deleteMeeting(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<Void> deleteMeeting(
+            @PathVariable Long id,
+            @RequestParam Long requestingUserId // Recebido temporariamente até integrar JWT
+    ) {
+        meetingService.deleteMeeting(id, requestingUserId);
+        return ResponseEntity.noContent().
+
+                build();
     }
 
     /**

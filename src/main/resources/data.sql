@@ -25,7 +25,9 @@ CREATE TABLE IF NOT EXISTS meetings (
 INSERT INTO users (name, email, password, matricula, role) VALUES
 ('Teste', 'teste@teste.com','123',123123, 'ADMIN'),
 ('Teste2', 'teste2@teste.com','456',456456,'USER'),
-('Teste3', 'teste3@teste.com','789',789789, 'USER');
+('Teste3', 'teste3@teste.com','789',789789, 'USER'),
+('Teste4', 'teste4@teste.com','789',7897891, 'USER'),
+('Teste5', 'teste5@teste.com','789',7897892, 'USER');
 
 INSERT INTO meetings (title, update_date, meet_date, time_start, time_end, meeting_room, user_id) VALUES
 ('Reunião de Estratégia', '2025-08-08 08:00:00', '2025-08-09', '09:00:00', '10:00:00', 'CIEGES', 1),

@@ -43,14 +43,6 @@ public class LogUpdateService {
                 .toList();
     }
 
-    // Buscar os logs por período
-//    public List<LogUpdateDto> getLogsByPeriod(LocalDateTime start, LocalDateTime end) {
-//        List<LogUpdate> logs = logUpdateRepository.findByLogDateTimeBetween(start, end);
-//
-//        return logs.stream()
-//                .map(LogUpdateDto::fromEntity)
-//                .toList();
-//    }
     public List<LogUpdateDto> getLogsByPeriod(
             LocalDate startDate, LocalTime startTime,
             LocalDate endDate, LocalTime endTime
