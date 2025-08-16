@@ -17,7 +17,7 @@ public class UserDto {
     @Size(min = 6, max = 10, message = "A senha deve ter entre 6 e 10 caracteres.")
     private String password;
     @Schema(description = "Matrícula do usuário")
-    private Long matricula;
+    private String matricula;
     @Schema(description = "Tipo acesso do usuário")
     private UserRole role;
 
@@ -45,11 +45,11 @@ public class UserDto {
         this.password = password;
     }
 
-    public Long getMatricula() {
+    public String getMatricula() {
         return matricula;
     }
 
-    public void setMatricula(Long matricula) {
+    public void setMatricula(String matricula) {
         this.matricula = matricula;
     }
 

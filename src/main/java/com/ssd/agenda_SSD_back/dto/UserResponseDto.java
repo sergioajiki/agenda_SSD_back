@@ -11,9 +11,9 @@ public record UserResponseDto(
         @Schema(description = "Email do usuário cadastrado")
         String email,
         @Schema(description = "Matrícula do usuário cadastrado")
-        Long matricula
+        String matricula
 ) {
-    public UserResponseDto(Long id, String name, String email, Long matricula){
+    public UserResponseDto(Long id, String name, String email, String matricula){
         this.id = id;
         this.name = name;
         this.email = email;
@@ -35,7 +35,7 @@ public record UserResponseDto(
     }
 
     @Override
-    public Long matricula() {
+    public String matricula() {
         return matricula;
     }
 

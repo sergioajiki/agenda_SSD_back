@@ -16,7 +16,7 @@ public class User {
     @Column(nullable = false, length = 100)
     private String password;
     @Column(nullable = false)
-    private Long matricula;
+    private String matricula;
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private UserRole role;
@@ -53,11 +53,11 @@ public class User {
         this.password = password;
     }
 
-    public Long getMatricula() {
+    public String getMatricula() {
         return matricula;
     }
 
-    public void setMatricula(Long matricula) {
+    public void setMatricula(String matricula) {
         this.matricula = matricula;
     }
 
