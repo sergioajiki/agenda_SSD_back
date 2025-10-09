@@ -29,6 +29,7 @@ public class UserService {
         }
 
         //Criptografar a senha antes de salvar no BD
+        newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
 
         return userRepository.save(newUser);
     }
@@ -37,5 +38,15 @@ public class UserService {
 
         return userRepository.findById(id).orElseThrow(() -> new NotFoundException(
                 "Usuário não encontrado com ID " + id));
+    }
+
+    public User login(String email, String password) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
+
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new IllegalArgumentException("Senha inválida");
+        }
+        return user;
     }
 }

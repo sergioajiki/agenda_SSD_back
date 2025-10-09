@@ -40,4 +40,18 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
+
+    @PostMapping("/login")
+    @Operation(summary = "Login de usuário", description = "Autentica usuário pelo email e senha")
+    public ResponseEntity<UserResponseDto> login(@RequestBody UserDto userDto) {
+        try {
+            User loggedUser = userService.login(userDto.getEmail(), userDto.getPassword());
+            UserResponseDto responseDto = UserResponseDto.userResponseDto(loggedUser);
+            return ResponseEntity.ok(responseDto);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
 }
