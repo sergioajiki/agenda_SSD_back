@@ -8,11 +8,14 @@ import com.ssd.agenda_SSD_back.entity.User;
 import com.ssd.agenda_SSD_back.util.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Service
 public class UserService {
     @Autowired
     private UserRepository userRepository;
+
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public User createUser(User newUser) {
         //Criar uma verificação de formato de email válido
