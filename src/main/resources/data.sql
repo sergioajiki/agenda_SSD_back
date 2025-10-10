@@ -23,11 +23,11 @@ CREATE TABLE IF NOT EXISTS meetings (
 
 -- Inserção de registros na tabela users
 INSERT INTO users (name, email, password, matricula, role) VALUES
-('Teste', 'teste@teste.com','123','123123', 'ADMIN'),
-('Teste2', 'teste2@teste.com','456','456456','USER'),
-('Teste3', 'teste3@teste.com','789','789789', 'USER'),
-('Teste4', 'teste4@teste.com','789','7897891', 'USER'),
-('Teste5', 'teste5@teste.com','789','7897892', 'USER');
+('um', 'um@teste.com','$2a$10$vz2S3c0o34pXUe/wHKTpauSUBUEMG6LsrWzzgrlnz6P9iOJTrI0Wa','123123', 'ADMIN'),
+('dois', 'dois@teste.com','$2a$10$f9Get9cQ5mL2UpJWBsehW.Enryhikr/rguXUAKTE0nCHmi7YmOGOq','456456','USER'),
+('Jon Doe', 'jondoe@teste.com','$2a$10$Q/b3CuYqExX8Gpdcewndwuqr5EnEQaI58FyT7/A1kTP29Pt7WDmm2','789789', 'USER'),
+('Teste', 'teste@teste.com','123','7897891', 'USER'),
+('Teste2', 'teste2@teste.com','456','7897892', 'USER');
 
 INSERT INTO meetings (title, update_date, meet_date, time_start, time_end, meeting_room, user_id) VALUES
 ('Reunião de Estratégia', '2025-08-08 08:00:00', '2025-08-09', '09:00:00', '10:00:00', 'CIEGES', 1),
@@ -49,4 +49,18 @@ INSERT INTO meetings (title, update_date, meet_date, time_start, time_end, meeti
 ('CTEC Paulo B.', '2025-07-01 12:30:00', '2025-08-21', '10:00:00', '11:30:00', 'APOIO', 1),
 ('Marcos Freitas', '2025-07-01 12:30:00', '2025-08-31', '14:00:00', '16:00:00', 'APOIO', 1),
 ('Telessaúde Valeria', '2025-07-01 12:30:00', '2025-08-22', '14:00:00', '16:00:00', 'APOIO', 1),
+('Marcia', '2025-09-03 12:30:00', '2025-09-04', '08:00:00', '10:00:00', 'APOIO', 1),
+('Marcia', '2025-09-04 12:30:00', '2025-09-05', '07:30:00', '12:00:00', 'APOIO', 1),
+('Marcia', '2025-09-03 12:30:00', '2025-09-04', '08:00:00', '10:00:00', 'APOIO', 1),
+('Corpo de Bombeiros', '2025-09-03 14:00:00', '2025-09-09', '14:00:00', '16:00:00', 'APOIO', 1),
+('Pet UEMS', '2025-09-03 12:30:00', '2025-09-10', '14:30:00', '16:30:00', 'APOIO', 1),
+('Valéria', '2025-09-03 12:30:00', '2025-09-16', '07:30:00', '10:00:00', 'APOIO', 1),
+('Pet UEMS Euder', '2025-09-03 12:30:00', '2025-09-17', '14:30:00', '16:30:00', 'APOIO', 1),
+('Valéria', '2025-09-03 12:30:00', '2025-09-04', '13:30:00', '15:30:00', 'APOIO', 1),
+('Marcia', '2025-09-03 12:30:00', '2025-09-29', '14:30:00', '17:00:00', 'APOIO', 1),
+('Gabriel', '2025-09-03 12:30:00', '2025-10-01', '07:30:00', '11:30:00', 'APOIO', 1),
+('Gabriel', '2025-09-03 12:30:00', '2025-10-01', '13:00:00', '17:00:00', 'APOIO', 1),
+('Valéria', '2025-09-03 12:30:00', '2025-10-03', '13:30:00', '15:30:00', 'APOIO', 1),
+('Hazii', '2025-09-03 12:30:00', '2025-10-09', '08:00:00', '11:30:00', 'APOIO', 1),
+('Marcos', '2025-09-03 12:30:00', '2025-10-10', '08:30:00', '11:30:00', 'APOIO', 1),
 ('PET SD - UEMS', '2025-07-01 12:30:00', '2025-08-25', '14:00:00', '16:00:00', 'APOIO', 1);

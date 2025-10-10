@@ -1,4 +1,6 @@
 package com.ssd.agenda_SSD_back.controller;
+import com.ssd.agenda_SSD_back.dto.LoginRequestDto;
+import com.ssd.agenda_SSD_back.dto.LoginResponseDto;
 import com.ssd.agenda_SSD_back.dto.UserDto;
 import com.ssd.agenda_SSD_back.dto.UserResponseDto;
 import com.ssd.agenda_SSD_back.entity.User;
@@ -43,11 +45,11 @@ public class UserController {
 
     @PostMapping("/login")
     @Operation(summary = "Login de usuário", description = "Autentica usuário pelo email e senha")
-    public ResponseEntity<UserResponseDto> login(@RequestBody UserDto userDto) {
+    public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto loginRequest) {
         try {
-            User loggedUser = userService.login(userDto.getEmail(), userDto.getPassword());
+            User loggedUser = userService.login(loginRequest.getEmail(), loginRequest.getPassword());
             UserResponseDto responseDto = UserResponseDto.userResponseDto(loggedUser);
-            return ResponseEntity.ok(responseDto);
+            return ResponseEntity.ok(LoginResponseDto.fromEntity(loggedUser));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         } catch (Exception e) {
