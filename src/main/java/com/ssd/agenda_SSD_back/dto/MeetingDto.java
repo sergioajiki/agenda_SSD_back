@@ -44,6 +44,9 @@ public class MeetingDto {
     @NotNull(message = "O ID do usuário responsável é obrigatório.")
     private Long userId;
 
+    @Schema(description = "Nome do usuário responsável pela reunião")
+    private String userName;
+
     public Long getId() {
         return id;
     }
@@ -100,6 +103,14 @@ public class MeetingDto {
         this.userId = userId;
     }
 
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
     public static Meeting toEntity(MeetingDto meetingDto, User user) {
         Meeting meeting = new Meeting();
         meeting.setTitle(meetingDto.getTitle());
@@ -121,6 +132,7 @@ public class MeetingDto {
         meetingDto.setTimeEnd(meeting.getTimeEnd());
         meetingDto.setMeetingRoom(meeting.getMeetingRoom());
         meetingDto.setUserId(meeting.getHostUser().getId());
+        meetingDto.setUserName(meeting.getHostUser().getName());
         return meetingDto;
     }
 }
