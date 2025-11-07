@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS meetings (
 
 -- Inserção de registros na tabela users
 INSERT INTO users (name, email, password, matricula, role) VALUES
-('um', 'um@teste.com','$2a$10$vz2S3c0o34pXUe/wHKTpauSUBUEMG6LsrWzzgrlnz6P9iOJTrI0Wa','123123', 'ADMIN'),
+('adm', 'adm@teste.com','$2a$10$vz2S3c0o34pXUe/wHKTpauSUBUEMG6LsrWzzgrlnz6P9iOJTrI0Wa','123123', 'ADMIN'),
 ('dois', 'dois@teste.com','$2a$10$f9Get9cQ5mL2UpJWBsehW.Enryhikr/rguXUAKTE0nCHmi7YmOGOq','456456','USER'),
 ('Jon Doe', 'jondoe@teste.com','$2a$10$Q/b3CuYqExX8Gpdcewndwuqr5EnEQaI58FyT7/A1kTP29Pt7WDmm2','789789', 'USER'),
 ('vinícius','vinifernandes44@gmail.com','$2a$10$BcyTLSK60IseIqgzORNouuoQvItavP9mo.iExyl4tFsWfsE1aMasK','5616516','USER'),
@@ -32,16 +32,16 @@ INSERT INTO users (name, email, password, matricula, role) VALUES
 ('Teste2', 'teste2@teste.com','456','7897892', 'USER');
 
 INSERT INTO meetings (title, update_date, meet_date, time_start, time_end, meeting_room, user_id) VALUES
-('Reunião de Estratégia', '2025-08-08 08:00:00', '2025-08-09', '09:00:00', '10:00:00', 'CIEGES', 1),
-('Planejamento Semanal', '2025-08-08 08:30:00', '2025-08-10', '11:00:00', '12:00:00', 'APOIO', 2),
-('Alinhamento de Equipe', '2025-08-08 09:00:00', '2025-08-11', '13:00:00', '14:00:00', 'CIEGES', 3),
-('Feedback de Projeto', '2025-08-08 09:30:00', '2025-08-12', '15:00:00', '16:00:00', 'APOIO', 1),
-('Workshop Interno', '2025-08-08 10:00:00', '2025-08-13', '09:00:00', '11:00:00', 'CIEGES', 2),
-('Discussão Técnica', '2025-08-08 10:30:00', '2025-08-14', '14:00:00', '15:30:00', 'APOIO', 3),
-('Revisão de Metas', '2025-08-08 11:00:00', '2025-08-15', '08:00:00', '09:00:00', 'CIEGES', 1),
-('Apresentação de Resultados', '2025-08-08 11:30:00', '2025-08-16', '10:00:00', '11:00:00', 'APOIO', 2),
-('Planejamento de Sprint', '2025-08-08 12:00:00', '2025-08-17', '13:30:00', '15:00:00', 'CIEGES', 3),
-('Capacitação', '2025-08-08 12:30:00', '2025-08-18', '16:00:00', '17:30:00', 'APOIO', 1),
+('Reunião de Estratégia - TESTE', '2025-08-08 08:00:00', '2025-08-09', '09:00:00', '10:00:00', 'CIEGES', 1),
+('Planejamento Semanal - TESTE', '2025-08-08 08:30:00', '2025-08-10', '11:00:00', '12:00:00', 'APOIO', 2),
+('Alinhamento de Equipe - TESTE', '2025-08-08 09:00:00', '2025-08-11', '13:00:00', '14:00:00', 'CIEGES', 3),
+('Feedback de Projeto - TESTE', '2025-08-08 09:30:00', '2025-08-12', '15:00:00', '16:00:00', 'APOIO', 1),
+('Workshop Interno - TESTE', '2025-08-08 10:00:00', '2025-08-13', '09:00:00', '11:00:00', 'CIEGES', 2),
+('Discussão Técnica - TESTE', '2025-08-08 10:30:00', '2025-08-14', '14:00:00', '15:30:00', 'APOIO', 3),
+('Revisão de Metas - TESTE', '2025-08-08 11:00:00', '2025-08-15', '08:00:00', '09:00:00', 'CIEGES', 1),
+('Apresentação de Resultados - TESTE', '2025-08-08 11:30:00', '2025-08-16', '10:00:00', '11:00:00', 'APOIO', 2),
+('Planejamento de Sprint - TESTE', '2025-08-08 12:00:00', '2025-08-17', '13:30:00', '15:00:00', 'CIEGES', 3),
+('Capacitação - TESTE', '2025-08-08 12:30:00', '2025-08-18', '16:00:00', '17:30:00', 'APOIO', 1),
 ('Equipe DSEI/MS e NT/MS', '2025-07-01 12:30:00', '2025-07-31', '09:00:00', '11:00:00', 'APOIO', 1),
 ('Telessaúde Euder', '2025-07-01 12:30:00', '2025-08-01', '14:00:00', '16:00:00', 'APOIO', 1),
 ('WEB e-Visita DF/MS - CTEC Luiz', '2025-07-01 12:30:00', '2025-08-06', '08:30:00', '10:00:00', 'APOIO', 1),
@@ -53,7 +53,6 @@ INSERT INTO meetings (title, update_date, meet_date, time_start, time_end, meeti
 ('Telessaúde Valeria', '2025-07-01 12:30:00', '2025-08-22', '14:00:00', '16:00:00', 'APOIO', 1),
 ('Marcia', '2025-09-03 12:30:00', '2025-09-04', '08:00:00', '10:00:00', 'APOIO', 1),
 ('Marcia', '2025-09-04 12:30:00', '2025-09-05', '07:30:00', '12:00:00', 'APOIO', 1),
-('Marcia', '2025-09-03 12:30:00', '2025-09-04', '08:00:00', '10:00:00', 'APOIO', 1),
 ('Corpo de Bombeiros', '2025-09-03 14:00:00', '2025-09-09', '14:00:00', '16:00:00', 'APOIO', 1),
 ('Pet UEMS', '2025-09-03 12:30:00', '2025-09-10', '14:30:00', '16:30:00', 'APOIO', 1),
 ('Valéria', '2025-09-03 12:30:00', '2025-09-16', '07:30:00', '10:00:00', 'APOIO', 1),
@@ -65,7 +64,6 @@ INSERT INTO meetings (title, update_date, meet_date, time_start, time_end, meeti
 ('Valéria', '2025-09-03 12:30:00', '2025-10-03', '13:30:00', '15:30:00', 'APOIO', 1),
 ('Hazii', '2025-09-03 12:30:00', '2025-10-09', '08:00:00', '11:30:00', 'APOIO', 1),
 ('Marcos', '2025-09-03 12:30:00', '2025-10-10', '08:30:00', '11:30:00', 'APOIO', 1),
-('Giovana', '2025-10-08 08:00:00', '2025-10-09', '08:00:00', '12:00:00', 'APOIO', 1),
 ('Rosangela', '2025-10-15 12:30:00', '2025-10-16', '09:00:00', '11:00:00', 'APOIO', 1),
 ('Luiz CTEC', '2025-10-15 13:30:00', '2025-10-17', '09:00:00', '11:30:00', 'APOIO', 1),
 ('Valéria', '2025-10-13 12:30:00', '2025-10-17', '13:30:00', '15:30:00', 'APOIO', 1),
@@ -81,5 +79,6 @@ INSERT INTO meetings (title, update_date, meet_date, time_start, time_end, meeti
 ('Valéria - PETI', '2025-11-03 12:30:00', '2025-11-14', '13:30:00', '16:00:00', 'APOIO', 1),
 ('Valéria - PETI', '2025-11-03 12:30:00', '2025-11-28', '13:30:00', '16:00:00', 'APOIO', 1),
 ('SGH - Edson - HR Dourados - Proj. SEIDIGI	', '2025-11-04 17:00:00', '2025-11-05', '08:00:00', '11:30:00', 'APOIO', 1),
-('Manutenção', '2025-11-04 12:30:00', '2025-11-05', '08:30:00', '17:00:00', 'CIEGES', 1),
-('PET SD - UEMS', '2025-07-01 12:30:00', '2025-08-25', '14:00:00', '16:00:00', 'APOIO', 1);
+('Manutenção', '2025-11-04 12:30:00', '2025-11-11', '08:30:00', '17:00:00', 'CIEGES', 1),
+('IBGE - Marcos CTEC', '2025-11-05 13:30:00', '2025-11-10', '09:00:00', '10:00:00', 'APOIO', 1),
+('PET SD - UEMS', '2025-07-01 12:30:00', '2025-08-25', '14:00:00', '16:00:00', 'APOIO', 1);git
