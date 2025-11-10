@@ -28,8 +28,10 @@ INSERT INTO users (name, email, password, matricula, role) VALUES
 ('Jon Doe', 'jondoe@teste.com','$2a$10$Q/b3CuYqExX8Gpdcewndwuqr5EnEQaI58FyT7/A1kTP29Pt7WDmm2','789789', 'USER'),
 ('vinícius','vinifernandes44@gmail.com','$2a$10$BcyTLSK60IseIqgzORNouuoQvItavP9mo.iExyl4tFsWfsE1aMasK','5616516','USER'),
 ('Euder Nunes', 'enunes@saude.ms.gov.br','$2a$10$w8UMKXLYYX5UjYTWsXuux.lhPORwoFNzIo2QDMlGgF3wQCh0RFY5i','101010', 'USER'),
+('Débora Cardoso', 'cardosodebora108@gmail.com','$2a$10$wL170bguUBFvmCA0HXqzjeh2lBHRFYFpyrv5gpH1a4VyXAztjKeB.','0000011111', 'USER'),
 ('Teste', 'teste@teste.com','123','7897891', 'USER'),
 ('Teste2', 'teste2@teste.com','456','7897892', 'USER');
+
 
 INSERT INTO meetings (title, update_date, meet_date, time_start, time_end, meeting_room, user_id) VALUES
 ('Reunião de Estratégia - TESTE', '2025-08-08 08:00:00', '2025-08-09', '09:00:00', '10:00:00', 'CIEGES', 1),
@@ -86,4 +88,5 @@ INSERT INTO meetings (title, update_date, meet_date, time_start, time_end, meeti
 ('Apresentação Plataforma Telemedicina CETEL', '2025-11-07 13:30:00', '2025-11-17', '09:00:00', '11:30:00', 'APOIO', 1),
 ('Apresentação Plataforma Telemedicina CETEL', '2025-11-07 13:30:00', '2025-11-10', '14:30:00', '16:30:00', 'APOIO', 1),
 ('Rafaela', '2025-11-07 13:30:00', '2025-11-10', '13:00:00', '14:00:00', 'APOIO', 1),
+('Apresentação Plataforma Telemedicina CETEL', '2025-11-10 13:00:00', '2025-11-17', '13:00:00', '16:30:00', 'APOIO', 1),
 ('Fiocruz / Núcleo', '2025-11-07 13:30:00', '2025-11-12', '08:00:00', '11:30:00', 'APOIO', 1);
