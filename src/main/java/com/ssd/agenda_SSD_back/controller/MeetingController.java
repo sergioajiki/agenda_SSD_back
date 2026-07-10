@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@CrossOrigin
 @RestController
 @Tag(name = "Meetings", description = "Gerenciamento de Reuniões")
 @RequestMapping("/api/meeting")

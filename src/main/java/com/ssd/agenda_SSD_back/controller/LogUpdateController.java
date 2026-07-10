@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
-@CrossOrigin
 @RestController
 @Tag(name = "Logs", description = "Logs de atualização das tarefas")
 @RequestMapping("/api/logs")

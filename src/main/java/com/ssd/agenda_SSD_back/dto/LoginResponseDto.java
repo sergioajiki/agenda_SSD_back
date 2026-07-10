@@ -6,20 +6,25 @@ public class LoginResponseDto {
     private String name;
     private String email;
     private String role;
+    // Token JWT emitido neste login — o front deve reenviá-lo no header
+    // "Authorization: Bearer <token>" em toda chamada autenticada seguinte.
+    private String token;
 
-    public LoginResponseDto(Long id, String name, String email, String role) {
+    public LoginResponseDto(Long id, String name, String email, String role, String token) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.role = role;
+        this.token = token;
     }
 
-    public static  LoginResponseDto fromEntity(User user) {
+    public static LoginResponseDto fromEntity(User user, String token) {
         return new LoginResponseDto(
                 user.getId(),
                 user.getName(),
                 user.getEmail(),
-                user.getRole().name()
+                user.getRole().name(),
+                token
         );
     }
 
@@ -53,5 +58,13 @@ public class LoginResponseDto {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }
