@@ -1,11 +1,17 @@
 package com.ssd.agenda_SSD_back.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ssd.agenda_SSD_back.advice.Problem;
 import com.ssd.agenda_SSD_back.security.JwtAuthenticationFilter;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
@@ -16,6 +22,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -27,14 +34,15 @@ import java.util.List;
  * antes de chegar nos controllers — não existe HttpSession nem cookie de
  * login.
  *
- * As regras abaixo ainda são no nível "precisa estar logado ou não". Regras
- * mais finas por role (ex.: só ADMIN pode cadastrar usuário em
- * UserController, e trocar o requestingUserId do MeetingController pelo
- * usuário autenticado) entram numa etapa seguinte do roadmap de segurança —
- * ver o artefato de diagnóstico do projeto.
+ * A listagem de reuniões (GET /api/meeting) é pública de propósito — a
+ * agenda é exibida em telas de consulta sem login. Todo o resto exige pelo
+ * menos um token válido, e algumas rotas (cadastro de usuário, logs) exigem
+ * além disso a role ADMIN via @PreAuthorize direto no controller.
  */
 @Configuration
 @EnableWebSecurity
+// Liga o @PreAuthorize nos controllers (ex.: cadastro de usuário e logs, restritos a ADMIN).
+@EnableMethodSecurity
 public class SecurityConfig {
 
     @Autowired
@@ -45,6 +53,9 @@ public class SecurityConfig {
     // origens configurada em application.properties (cors.allowed-origins).
     @Value("${cors.allowed-origins}")
     private String allowedOrigins;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -63,13 +74,19 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         // Login precisa ser público, senão ninguém consegue obter o token.
                         .requestMatchers("/api/user/login").permitAll()
+                        // A agenda é exibida publicamente em vários lugares (ex.: telas de
+                        // consulta) — só criar/editar/excluir reunião exige login, listar não.
+                        .requestMatchers(HttpMethod.GET, "/api/meeting", "/api/meeting/**").permitAll()
                         // Health check e documentação Swagger também ficam abertos.
                         .requestMatchers("/api/health", "/api/health/**").permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         // Console H2 segue aberto por enquanto — item já sinalizado
                         // no diagnóstico de segurança do projeto pra ser fechado depois.
                         .requestMatchers("/h2-console/**").permitAll()
-                        // Todo o resto exige um token válido.
+                        // Todo o resto (cadastro de usuário, logs, criar/editar/excluir
+                        // reunião) exige um token válido. Restrições mais finas por role
+                        // (ex.: cadastro/logs só ADMIN) ficam a cargo de @PreAuthorize
+                        // direto nos controllers — ver UserController e LogUpdateController.
                         .anyRequest().authenticated()
                 )
 
@@ -78,9 +95,34 @@ public class SecurityConfig {
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
 
                 // O filtro JWT roda antes do filtro padrão de login por formulário.
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+
+                // Corpo de erro consistente com o resto da API (mesmo formato do
+                // Problem usado em GeneralControllerAdvice) pras duas situações que
+                // o Spring Security intercepta antes de chegar num controller:
+                // sem token/token inválido (401) e token válido mas sem permissão
+                // de rota (403). Violação de @PreAuthorize dentro de um controller
+                // já cai no GeneralControllerAdvice normalmente.
+                .exceptionHandling(exceptions -> exceptions
+                        .authenticationEntryPoint((request, response, authException) ->
+                                writeProblem(response, HttpStatus.UNAUTHORIZED,
+                                        "Unauthorized", "Autenticação necessária ou token inválido/expirado."))
+                        .accessDeniedHandler((request, response, accessDeniedException) ->
+                                writeProblem(response, HttpStatus.FORBIDDEN,
+                                        "Forbidden", "Você não tem permissão para executar esta ação."))
+                );
 
         return http.build();
+    }
+
+    private void writeProblem(HttpServletResponse response, HttpStatus status, String message, String detail) throws IOException {
+        Problem problem = new Problem(status.value(), message, detail, null);
+        response.setStatus(status.value());
+        // Sem isso o Writer cai no encoding padrão da JVM/SO (não necessariamente
+        // UTF-8), e acento em "detail" vira "?" no corpo da resposta.
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.getWriter().write(objectMapper.writeValueAsString(problem));
     }
 
     /** Política de CORS única da API — origens vêm de cors.allowed-origins. */

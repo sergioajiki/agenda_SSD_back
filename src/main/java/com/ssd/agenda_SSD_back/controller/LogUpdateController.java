@@ -6,18 +6,20 @@ import com.ssd.agenda_SSD_back.entity.User;
 import com.ssd.agenda_SSD_back.service.LogUpdateService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import javax.lang.model.element.Name;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
+// Log de auditoria é ferramenta de admin: expõe o histórico de ações de
+// todos os usuários, então a classe inteira exige a role ADMIN.
 @RestController
-@Tag(name = "Logs", description = "Logs de atualização das tarefas")
+@PreAuthorize("hasRole('ADMIN')")
+@Tag(name = "Logs", description = "Logs de atualização das tarefas (somente ADMIN)")
 @RequestMapping("/api/logs")
-public final class LogUpdateController {
+public class LogUpdateController {
     private final LogUpdateService logUpdateService;
 
     public LogUpdateController(LogUpdateService logUpdateService) {

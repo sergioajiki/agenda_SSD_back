@@ -31,13 +31,17 @@ public class MeetingService {
     private LogUpdateRepository logUpdateRepository;
 
     // Criar função para Salvar meeting
-    public Meeting saveMeeting(MeetingDto meetingDto) {
+    public Meeting saveMeeting(MeetingDto meetingDto, String requestingUserEmail) {
         // Validação: hora inicial < hora final
         if (!meetingDto.getTimeStart().isBefore(meetingDto.getTimeEnd())) {
             throw new BusinessRuleException("O horário de início deve ser antes do horário de término");
         }
 
-        User user = userRepository.findById(meetingDto.getUserId()).orElseThrow(() -> new NotFoundException("Usuário não encontrado com ID: " + meetingDto.getUserId()));
+        // O dono da reunião é sempre o usuário autenticado — o "userId" que
+        // vem no DTO é ignorado pra criação, evitando que alguém agende em
+        // nome de outra pessoa só preenchendo esse campo no corpo da requisição.
+        User user = userRepository.findByEmail(requestingUserEmail)
+                .orElseThrow(() -> new NotFoundException("Usuário autenticado não encontrado: " + requestingUserEmail));
         Meeting meeting = MeetingDto.toEntity(meetingDto, user);
 
         //Valida sobreposição
@@ -60,11 +64,11 @@ public class MeetingService {
     }
 
     // Criar função para Apagar meeting
-    public void deleteMeeting(Long id, Long requestingUserId) {
+    public void deleteMeeting(Long id, String requestingUserEmail) {
         Meeting existingMeeting = meetingRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Reunião não encontrada com ID: " + id));
         // Verifica permissão
-        verificarPermissao(existingMeeting, requestingUserId);
+        verificarPermissao(existingMeeting, requestingUserEmail);
         // Registra Log de exclusão
         registerLog("DELETE", null, existingMeeting.getId(), existingMeeting.getMeetingRoom(), existingMeeting.getHostUser());
         meetingRepository.delete(existingMeeting);
@@ -84,7 +88,7 @@ public class MeetingService {
     }
 
     // Atualizar reuniões
-    public Meeting updateMeeting(Long id, MeetingDto meetingDto, Long requestingUserId) {
+    public Meeting updateMeeting(Long id, MeetingDto meetingDto, String requestingUserEmail) {
         // Validação: hora inicial < hora final
         if (!meetingDto.getTimeStart().isBefore(meetingDto.getTimeEnd())) {
             throw new BusinessRuleException("O horário de início deve ser antes do horário de término");
@@ -98,7 +102,7 @@ public class MeetingService {
                 .orElseThrow(() -> new NotFoundException("Usuário não encontrado com ID: " + meetingDto.getUserId()));
 
         //  Apenas criador ou ADMIN pode alterar
-        verificarPermissao(existingMeeting, requestingUserId);
+        verificarPermissao(existingMeeting, requestingUserEmail);
 
         Meeting updatedMeeting = MeetingDto.toEntity(meetingDto, user);
         // Ajustar ID para comparação correta e consistência
@@ -150,9 +154,12 @@ public class MeetingService {
         logUpdateRepository.save(log);
     }
 
-    private void verificarPermissao(Meeting meeting, Long requestingUserId) {
-        User requestingUser = userRepository.findById(requestingUserId)
-                .orElseThrow(() -> new NotFoundException("Usuário solicitante não encontrado com ID: " + requestingUserId));
+    private void verificarPermissao(Meeting meeting, String requestingUserEmail) {
+        // O email vem do token JWT (Authentication.getName()), não mais de um
+        // parâmetro que o próprio cliente informava — por isso dá pra confiar
+        // nele pra decidir permissão.
+        User requestingUser = userRepository.findByEmail(requestingUserEmail)
+                .orElseThrow(() -> new NotFoundException("Usuário autenticado não encontrado: " + requestingUserEmail));
 
         boolean isOwner = meeting.getHostUser().getId().equals(requestingUser.getId());
         boolean isAdmin = requestingUser.getRole() == UserRole.ADMIN;

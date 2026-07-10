@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -28,8 +29,13 @@ public class UserController {
         this.jwtService = jwtService;
     }
 
+    // Cadastro deixou de ser público: só quem já está logado como ADMIN pode
+    // criar novos usuários — quem tem acesso à agenda é escolhido pelo admin,
+    // não é autoatendimento. "hasRole('ADMIN')" casa com a authority
+    // "ROLE_ADMIN" que o CustomUserDetailsService monta a partir do token.
     @PostMapping
-    @Operation(summary = "Cadastrar um novo usuário", description = "Cria um novo usuário no sistema")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Cadastrar um novo usuário", description = "Cria um novo usuário no sistema (somente ADMIN)")
     public ResponseEntity<UserResponseDto> createUser(@RequestBody UserDto userDto){
         try {
             //Converte o Dto para entity

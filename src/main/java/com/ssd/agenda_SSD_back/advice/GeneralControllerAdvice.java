@@ -7,6 +7,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -97,5 +98,20 @@ public class GeneralControllerAdvice {
                 null
         );
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problem);
+    }
+
+    // Disparada pelo @PreAuthorize quando o usuário está autenticado mas não
+    // tem a role exigida (ex.: USER tentando cadastrar outro usuário). Erros
+    // de "sem token nenhum" (401) não passam por aqui — são tratados antes,
+    // no SecurityConfig, porque acontecem fora do ciclo do DispatcherServlet.
+    @ExceptionHandler
+    public ResponseEntity<Problem> handleAccessDeniedException(AccessDeniedException exception) {
+        Problem problem = new Problem(
+                HttpStatus.FORBIDDEN.value(),
+                "Forbidden",
+                "Você não tem permissão para executar esta ação.",
+                null
+        );
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(problem);
     }
 }
