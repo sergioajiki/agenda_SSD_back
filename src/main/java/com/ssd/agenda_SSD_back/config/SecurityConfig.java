@@ -80,6 +80,13 @@ public class SecurityConfig {
                         // Health check e documentação Swagger também ficam abertos.
                         .requestMatchers("/api/health", "/api/health/**").permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        // Página de erro padrão do Spring Boot: quando uma requisição já
+                        // autenticada falha por outro motivo (ex.: exceção não tratada),
+                        // o servlet container faz um forward interno pra "/error" — sem
+                        // liberar essa rota, esse forward esbarra em "anyRequest().authenticated()"
+                        // de novo (o filtro JWT não roda 2x na mesma requisição) e o status
+                        // real do erro vira 401 de forma enganosa.
+                        .requestMatchers("/error").permitAll()
                         // Console H2 segue aberto por enquanto — item já sinalizado
                         // no diagnóstico de segurança do projeto pra ser fechado depois.
                         .requestMatchers("/h2-console/**").permitAll()

@@ -98,13 +98,15 @@ public class MeetingService {
         Meeting existingMeeting = meetingRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Reunião não encontrada com ID: " + id));
 
-        User user = userRepository.findById(meetingDto.getUserId())
-                .orElseThrow(() -> new NotFoundException("Usuário não encontrado com ID: " + meetingDto.getUserId()));
-
         //  Apenas criador ou ADMIN pode alterar
         verificarPermissao(existingMeeting, requestingUserEmail);
 
-        Meeting updatedMeeting = MeetingDto.toEntity(meetingDto, user);
+        // O dono da reunião não muda numa edição — o front não manda mais
+        // "userId" no corpo (o dono só é decidido na criação, a partir do
+        // token). Antes esse valor era usado pra resolver o usuário aqui, o
+        // que também tinha o efeito colateral de trocar o dono da reunião
+        // silenciosamente quando um ADMIN editava a reunião de outra pessoa.
+        Meeting updatedMeeting = MeetingDto.toEntity(meetingDto, existingMeeting.getHostUser());
         // Ajustar ID para comparação correta e consistência
         updatedMeeting.setId(existingMeeting.getId());
 
