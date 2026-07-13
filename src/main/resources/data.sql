@@ -4,8 +4,10 @@ CREATE TABLE IF NOT EXISTS users (
     name VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
     password VARCHAR(100) NOT NULL,
-    matricula VARCHAR (20) NOT NULL,
-    role VARCHAR(20)  NOT NULL
+    matricula VARCHAR (20),
+    role VARCHAR(20)  NOT NULL,
+    enabled BOOLEAN NOT NULL DEFAULT TRUE,
+    must_change_password BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 -- Criação da tabela meetings

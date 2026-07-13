@@ -30,10 +30,14 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         // Authority no formato "ROLE_X" é a convenção que o Spring Security
         // espera pra casar com hasRole("X") nas regras de autorização.
+        // ".disabled(...)" reflete o "enabled" do usuário — é o que faz um
+        // usuário desativado pelo admin parar de autenticar, mesmo com token
+        // ainda válido (ver JwtAuthenticationFilter).
         return org.springframework.security.core.userdetails.User
                 .withUsername(user.getEmail())
                 .password(user.getPassword())
                 .authorities(List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().name())))
+                .disabled(!user.isEnabled())
                 .build();
     }
 }

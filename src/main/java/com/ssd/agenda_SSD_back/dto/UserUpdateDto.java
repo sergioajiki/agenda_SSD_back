@@ -1,23 +1,29 @@
 package com.ssd.agenda_SSD_back.dto;
 
-import com.ssd.agenda_SSD_back.entity.User;
 import com.ssd.agenda_SSD_back.enums.UserRole;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
-// Sem campo de senha: o admin não digita mais senha de ninguém — o
-// UserService gera uma temporária e devolve na resposta (ver UserCreatedDto),
-// pro admin repassar ao usuário, que troca no primeiro login.
-public class UserDto {
+/**
+ * Dados editáveis de um usuário pela tela de gestão de acessos (admin).
+ * Não inclui senha — troca de senha é um fluxo separado (ver roadmap de
+ * senha temporária / primeiro acesso).
+ */
+public class UserUpdateDto {
     @Schema(description = "Nome do usuário")
     @NotBlank(message = "O nome é obrigatório")
     private String name;
+
     @Schema(description = "Email do usuário")
     @NotBlank(message = "O email é obrigatório")
     private String email;
-    @Schema(description = "Matrícula do usuário")
+
+    @Schema(description = "Matrícula do usuário (opcional)")
     private String matricula;
-    @Schema(description = "Tipo acesso do usuário")
+
+    @Schema(description = "Tipo de acesso do usuário")
+    @NotNull(message = "A role é obrigatória")
     private UserRole role;
 
     public String getName() {
@@ -50,14 +56,5 @@ public class UserDto {
 
     public void setRole(UserRole role) {
         this.role = role;
-    }
-
-    public static User toEntity(UserDto userDto) {
-        User user = new User();
-        user.setName(userDto.getName());
-        user.setEmail(userDto.getEmail());
-        user.setMatricula(userDto.getMatricula());
-        user.setRole(userDto.getRole());
-        return user;
     }
 }

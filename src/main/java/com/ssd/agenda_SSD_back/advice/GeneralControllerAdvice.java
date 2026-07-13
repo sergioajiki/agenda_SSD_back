@@ -100,6 +100,19 @@ public class GeneralControllerAdvice {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problem);
     }
 
+    // Ex.: senha atual incorreta ao trocar perfil/senha (UserService.verifyCurrentPassword).
+    // login() e createUser() continuam com try/catch local pra isso (não passam por aqui).
+    @ExceptionHandler
+    public ResponseEntity<Problem> handleIllegalArgumentException(IllegalArgumentException exception) {
+        Problem problem = new Problem(
+                HttpStatus.BAD_REQUEST.value(),
+                "Invalid Request Info",
+                exception.getLocalizedMessage(),
+                null
+        );
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problem);
+    }
+
     // Disparada pelo @PreAuthorize quando o usuário está autenticado mas não
     // tem a role exigida (ex.: USER tentando cadastrar outro usuário). Erros
     // de "sem token nenhum" (401) não passam por aqui — são tratados antes,

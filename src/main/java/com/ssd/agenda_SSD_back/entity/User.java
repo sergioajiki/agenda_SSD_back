@@ -15,11 +15,22 @@ public class User {
     private String email;
     @Column(nullable = false, length = 100)
     private String password;
-    @Column(nullable = false)
+    // Opcional: nem todo usuário cadastrado pelo admin tem matrícula (ex.: colaboradores externos).
+    @Column(nullable = true)
     private String matricula;
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private UserRole role;
+    // "Apagar" usuário pela tela de gestão de acessos é desativar, não excluir
+    // de verdade — Meeting e LogUpdate têm FK obrigatória pro usuário, então
+    // um DELETE físico quebraria pra qualquer um que já tenha reunião/log.
+    @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT TRUE")
+    private boolean enabled = true;
+    // Marcado quando o admin gera uma senha temporária pro usuário — o front
+    // força a tela de trocar senha antes de liberar qualquer outra coisa,
+    // e UserService.changePassword zera isso depois de uma troca bem-sucedida.
+    @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
+    private boolean mustChangePassword = false;
 
     public Long getId() {
         return id;
@@ -67,5 +78,21 @@ public class User {
 
     public void setRole(UserRole role) {
         this.role = role;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public boolean isMustChangePassword() {
+        return mustChangePassword;
+    }
+
+    public void setMustChangePassword(boolean mustChangePassword) {
+        this.mustChangePassword = mustChangePassword;
     }
 }

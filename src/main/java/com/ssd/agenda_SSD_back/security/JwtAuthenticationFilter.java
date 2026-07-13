@@ -61,7 +61,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = userDetailsService.loadUserByUsername(email);
 
-                if (jwtService.isTokenValid(token, userDetails.getUsername())) {
+                // Usuário desativado pelo admin não autentica mais, mesmo com
+                // um token emitido antes da desativação e ainda dentro da
+                // validade — sem isso, "desativar" não teria efeito imediato.
+                if (jwtService.isTokenValid(token, userDetails.getUsername()) && userDetails.isEnabled()) {
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                             userDetails, null, userDetails.getAuthorities()
                     );

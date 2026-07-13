@@ -9,13 +9,18 @@ public class LoginResponseDto {
     // Token JWT emitido neste login — o front deve reenviá-lo no header
     // "Authorization: Bearer <token>" em toda chamada autenticada seguinte.
     private String token;
+    // Se true, o front deve forçar a tela de trocar senha antes de liberar
+    // qualquer outra coisa — é assim que a senha temporária gerada pelo
+    // admin vira obrigação de trocar no primeiro acesso.
+    private boolean mustChangePassword;
 
-    public LoginResponseDto(Long id, String name, String email, String role, String token) {
+    public LoginResponseDto(Long id, String name, String email, String role, String token, boolean mustChangePassword) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.role = role;
         this.token = token;
+        this.mustChangePassword = mustChangePassword;
     }
 
     public static LoginResponseDto fromEntity(User user, String token) {
@@ -24,7 +29,8 @@ public class LoginResponseDto {
                 user.getName(),
                 user.getEmail(),
                 user.getRole().name(),
-                token
+                token,
+                user.isMustChangePassword()
         );
     }
 
@@ -66,5 +72,13 @@ public class LoginResponseDto {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public boolean isMustChangePassword() {
+        return mustChangePassword;
+    }
+
+    public void setMustChangePassword(boolean mustChangePassword) {
+        this.mustChangePassword = mustChangePassword;
     }
 }
