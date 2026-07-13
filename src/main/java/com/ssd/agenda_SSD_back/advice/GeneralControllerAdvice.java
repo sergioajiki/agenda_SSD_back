@@ -101,7 +101,8 @@ public class GeneralControllerAdvice {
     }
 
     // Ex.: senha atual incorreta ao trocar perfil/senha (UserService.verifyCurrentPassword).
-    // login() e createUser() continuam com try/catch local pra isso (não passam por aqui).
+    // Só login() continua com try/catch local pra isso (não passa por aqui) — createUser()
+    // já usa esse handler normalmente desde que passou a gerar a senha temporária.
     @ExceptionHandler
     public ResponseEntity<Problem> handleIllegalArgumentException(IllegalArgumentException exception) {
         Problem problem = new Problem(
