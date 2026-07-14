@@ -23,8 +23,9 @@ public enum MeetingRoom {
 
     @JsonCreator
     public static MeetingRoom fromLabel(String label) {
+        String normalized = label == null ? null : label.trim();
         for (MeetingRoom room : values()) {
-            if (room.label.equalsIgnoreCase(label)) {
+            if (room.label.equalsIgnoreCase(normalized) || room.name().equalsIgnoreCase(normalized)) {
                 return room;
             }
         }

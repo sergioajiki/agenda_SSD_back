@@ -23,7 +23,10 @@ public class Meeting {
     private LocalTime timeStart; // Horário (hh:mm)
     @Column(name = "time_end", nullable = false)
     private LocalTime timeEnd; // Horário (hh:mm)
-    @Enumerated(EnumType.STRING)
+    // Conversão feita por MeetingRoomConverter (autoApply) em vez de
+    // @Enumerated(STRING) — precisa gravar/ler pelo label ("SALA WEB", com
+    // espaço) pra bater com reuniões antigas, criadas quando esse campo
+    // ainda era String livre, não pelo name() do enum (SALA_WEB).
     @Column(name = "meeting_room", nullable = false)
     private MeetingRoom meetingRoom;
     @ManyToOne
