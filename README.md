@@ -121,4 +121,3 @@ src/main/java/com/ssd/agenda_SSD_back/
 - **Sem testes automatizados**: toda a superfície de autenticação, gestão de acessos e senha temporária foi validada manualmente — nada está protegido contra regressão por CI.
 - **Sem migração de schema versionada** (Flyway/Liquibase): `ddl-auto=update` cria/ajusta tabelas automaticamente, o que não é ideal pra um ambiente de produção de verdade.
 - Checagem de sobreposição de horário é check-then-act sem lock — pode falhar sob concorrência real.
-- `meetingRoom` é uma string livre, sem entidade `Room` normalizada.

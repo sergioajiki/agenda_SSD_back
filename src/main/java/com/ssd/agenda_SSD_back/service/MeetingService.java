@@ -58,7 +58,7 @@ public class MeetingService {
         Meeting savedMeeting = meetingRepository.save(meeting);
 
         // Registrar log de criação
-        registerLog("CREATE", null, savedMeeting.getId(), savedMeeting.getMeetingRoom(), user);
+        registerLog("CREATE", null, savedMeeting.getId(), savedMeeting.getMeetingRoom().getLabel(), user);
 
         return savedMeeting;
     }
@@ -70,7 +70,7 @@ public class MeetingService {
         // Verifica permissão
         verificarPermissao(existingMeeting, requestingUserEmail);
         // Registra Log de exclusão
-        registerLog("DELETE", null, existingMeeting.getId(), existingMeeting.getMeetingRoom(), existingMeeting.getHostUser());
+        registerLog("DELETE", null, existingMeeting.getId(), existingMeeting.getMeetingRoom().getLabel(), existingMeeting.getHostUser());
         meetingRepository.delete(existingMeeting);
     }
 
@@ -135,7 +135,7 @@ public class MeetingService {
         existingMeeting.setHostUser(updatedMeeting.getHostUser());
 
         // Registra Log de atualização
-        registerLog("UPDATE", changes, existingMeeting.getId(), existingMeeting.getMeetingRoom(), existingMeeting.getHostUser());
+        registerLog("UPDATE", changes, existingMeeting.getId(), existingMeeting.getMeetingRoom().getLabel(), existingMeeting.getHostUser());
 
         return meetingRepository.save(existingMeeting);
     }

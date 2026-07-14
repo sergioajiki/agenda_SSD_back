@@ -1,5 +1,6 @@
 package com.ssd.agenda_SSD_back.entity;
 
+import com.ssd.agenda_SSD_back.enums.MeetingRoom;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -22,8 +23,9 @@ public class Meeting {
     private LocalTime timeStart; // Horário (hh:mm)
     @Column(name = "time_end", nullable = false)
     private LocalTime timeEnd; // Horário (hh:mm)
+    @Enumerated(EnumType.STRING)
     @Column(name = "meeting_room", nullable = false)
-    private String meetingRoom;
+    private MeetingRoom meetingRoom;
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User hostUser;
@@ -76,11 +78,11 @@ public class Meeting {
         this.timeEnd = timeEnd;
     }
 
-    public String getMeetingRoom() {
+    public MeetingRoom getMeetingRoom() {
         return meetingRoom;
     }
 
-    public void setMeetingRoom(String meetingRoom) {
+    public void setMeetingRoom(MeetingRoom meetingRoom) {
         this.meetingRoom = meetingRoom;
     }
 

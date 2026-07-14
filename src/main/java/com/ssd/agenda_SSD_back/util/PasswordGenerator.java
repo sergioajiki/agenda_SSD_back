@@ -10,7 +10,6 @@ import java.security.SecureRandom;
  */
 public final class PasswordGenerator {
     private static final String CHARS = "ABCDEFGHJKMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789";
-    // Dentro do limite de 6-10 caracteres já usado em UserDto.password.
     private static final int LENGTH = 10;
     private static final SecureRandom RANDOM = new SecureRandom();
 

@@ -4,7 +4,7 @@ import com.ssd.agenda_SSD_back.dto.LoginRequestDto;
 import com.ssd.agenda_SSD_back.dto.LoginResponseDto;
 import com.ssd.agenda_SSD_back.dto.SelfProfileUpdateDto;
 import com.ssd.agenda_SSD_back.dto.UserCreatedDto;
-import com.ssd.agenda_SSD_back.dto.UserDto;
+import com.ssd.agenda_SSD_back.dto.UserRequestDto;
 import com.ssd.agenda_SSD_back.dto.UserResponseDto;
 import com.ssd.agenda_SSD_back.dto.UserUpdateDto;
 import com.ssd.agenda_SSD_back.entity.User;
@@ -43,8 +43,8 @@ public class UserController {
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Cadastrar um novo usuário", description = "Cria um novo usuário com senha temporária gerada pelo sistema (somente ADMIN)")
-    public ResponseEntity<UserCreatedDto> createUser(@RequestBody UserDto userDto){
-        User userToSave = UserDto.toEntity(userDto);
+    public ResponseEntity<UserCreatedDto> createUser(@RequestBody UserRequestDto userRequestDto){
+        User userToSave = UserRequestDto.toEntity(userRequestDto);
         UserCreatedDto createdUser = userService.createUser(userToSave);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }

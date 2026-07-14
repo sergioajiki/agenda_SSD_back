@@ -3,6 +3,7 @@ package com.ssd.agenda_SSD_back.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ssd.agenda_SSD_back.entity.Meeting;
 import com.ssd.agenda_SSD_back.entity.User;
+import com.ssd.agenda_SSD_back.enums.MeetingRoom;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
@@ -38,7 +39,7 @@ public class MeetingDto {
 
     @Schema(description = "Local da reunião")
     @NotNull(message = "Necessário informar a sala de reunião")
-    private String meetingRoom;
+    private MeetingRoom meetingRoom;
 
     @Schema(description = "ID do usuário responsável pela reunião")
     @NotNull(message = "O ID do usuário responsável é obrigatório.")
@@ -87,11 +88,11 @@ public class MeetingDto {
         this.timeEnd = timeEnd;
     }
 
-    public String getMeetingRoom() {
+    public MeetingRoom getMeetingRoom() {
         return meetingRoom;
     }
 
-    public void setMeetingRoom(String meetingRoom) {
+    public void setMeetingRoom(MeetingRoom meetingRoom) {
         this.meetingRoom = meetingRoom;
     }
 

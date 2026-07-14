@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotBlank;
 // Sem campo de senha: o admin não digita mais senha de ninguém — o
 // UserService gera uma temporária e devolve na resposta (ver UserCreatedDto),
 // pro admin repassar ao usuário, que troca no primeiro login.
-public class UserDto {
+public class UserRequestDto {
     @Schema(description = "Nome do usuário")
     @NotBlank(message = "O nome é obrigatório")
     private String name;
@@ -52,12 +52,12 @@ public class UserDto {
         this.role = role;
     }
 
-    public static User toEntity(UserDto userDto) {
+    public static User toEntity(UserRequestDto userRequestDto) {
         User user = new User();
-        user.setName(userDto.getName());
-        user.setEmail(userDto.getEmail());
-        user.setMatricula(userDto.getMatricula());
-        user.setRole(userDto.getRole());
+        user.setName(userRequestDto.getName());
+        user.setEmail(userRequestDto.getEmail());
+        user.setMatricula(userRequestDto.getMatricula());
+        user.setRole(userRequestDto.getRole());
         return user;
     }
 }

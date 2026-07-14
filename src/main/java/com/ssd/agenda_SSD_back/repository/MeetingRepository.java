@@ -1,6 +1,7 @@
 package com.ssd.agenda_SSD_back.repository;
 
 import com.ssd.agenda_SSD_back.entity.Meeting;
+import com.ssd.agenda_SSD_back.enums.MeetingRoom;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -21,7 +22,7 @@ public interface MeetingRepository extends JpaRepository<Meeting, Long> {
             """)
     boolean existOverlappingMeeting(
             @Param("date") LocalDate date,
-            @Param("room") String room,
+            @Param("room") MeetingRoom room,
             @Param("startTime") LocalTime startTime,
             @Param("endTime") LocalTime endTime
     );
@@ -37,7 +38,7 @@ public interface MeetingRepository extends JpaRepository<Meeting, Long> {
             """)
     boolean existsOverlappingMeetingExcludingId(
             @Param("date") LocalDate date,
-            @Param("room") String room,
+            @Param("room") MeetingRoom room,
             @Param("startTime") LocalTime startTime,
             @Param("endTime") LocalTime endTime,
             @Param("excludeId") Long excludeId
