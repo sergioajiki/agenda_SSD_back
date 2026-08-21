@@ -1,3 +1,4 @@
+// Agenda SSD — Developed by S. Ajiki.
 package com.ssd.agenda_SSD_back;
 
 import org.springframework.boot.SpringApplication;

@@ -18,7 +18,9 @@
 		<license/>
 	</licenses>
 	<developers>
-		<developer/>
+		<developer>
+			<name>S. Ajiki</name>
+		</developer>
 	</developers>
 	<scm>
 		<connection/>

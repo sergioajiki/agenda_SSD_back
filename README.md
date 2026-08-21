@@ -12,6 +12,7 @@ API REST da aplicação de agendamento de reuniões da **Superintendência de Sa
 - **Edição e exclusão de reunião**, restritas ao dono da reunião ou a usuários com role `ADMIN`.
 - **Log de auditoria** de criação, edição e exclusão de reuniões (admin-only), consultável por reunião, por usuário ou por período.
 - **Health check** (`/api/health`) com status da aplicação, uptime, memória e status do banco — público.
+- **Configuração da tela de recepção** (`/api/display-settings`) — modo (letreiro contínuo ou carrossel paginado) e velocidade do carrossel de "próximos dias" exibido em `/display` no front-end. Leitura pública (a própria TV busca sem estar logada), troca restrita a `ADMIN`.
 - **Documentação interativa** via Swagger UI.
 
 ## Stack
@@ -86,6 +87,8 @@ Sem essas duas variáveis, a subida falha de propósito (erro de placeholder nã
 | `DELETE` | `/api/meeting/{id}` | Remove uma reunião | Dono ou ADMIN |
 | `GET` | `/api/logs`, `/api/logs/meeting/{id}`, `/api/logs/user/{id}`, `/api/logs/period` | Logs de auditoria | ADMIN |
 | `GET` | `/api/health` | Status da aplicação e do banco | Público |
+| `GET` | `/api/display-settings` | Lê modo/velocidade do carrossel da tela de recepção | Público |
+| `PUT` | `/api/display-settings` | Atualiza modo/velocidade do carrossel | ADMIN |
 
 Detalhes de request/response de cada endpoint estão no Swagger UI.
 
@@ -101,14 +104,14 @@ Detalhes de request/response de cada endpoint estão no Swagger UI.
 
 ```
 src/main/java/com/ssd/agenda_SSD_back/
-├─ controller/   # UserController, MeetingController, LogUpdateController, HealthController
-├─ service/      # UserService, MeetingService, LogUpdateService
-├─ repository/   # interfaces JpaRepository (User, Meeting, LogUpdate)
-├─ entity/       # User, Meeting, LogUpdate
+├─ controller/   # UserController, MeetingController, LogUpdateController, HealthController, DisplaySettingsController
+├─ service/      # UserService, MeetingService, LogUpdateService, DisplaySettingsService
+├─ repository/   # interfaces JpaRepository (User, Meeting, LogUpdate, DisplaySettings)
+├─ entity/       # User, Meeting, LogUpdate, DisplaySettings
 ├─ dto/          # DTOs de request/response, com toEntity/fromEntity estáticos
 ├─ security/     # JwtService, JwtAuthenticationFilter, CustomUserDetailsService
 ├─ config/       # SecurityConfig (CORS, regras de autorização, tratamento de 401/403)
-├─ enums/        # UserRole (USER, ADMIN)
+├─ enums/        # UserRole (USER, ADMIN), DisplayCarouselMode (MARQUEE, PAGED)
 ├─ exception/    # exceções de domínio (NotFoundException, ScheduleOverlapException, ...)
 ├─ advice/       # GeneralControllerAdvice — tratamento padronizado de erro
 └─ util/         # EmailValidator, LogUtils, PasswordGenerator
@@ -121,3 +124,7 @@ src/main/java/com/ssd/agenda_SSD_back/
 - **Sem testes automatizados**: toda a superfície de autenticação, gestão de acessos e senha temporária foi validada manualmente — nada está protegido contra regressão por CI.
 - **Sem migração de schema versionada** (Flyway/Liquibase): `ddl-auto=update` cria/ajusta tabelas automaticamente, o que não é ideal pra um ambiente de produção de verdade.
 - Checagem de sobreposição de horário é check-then-act sem lock — pode falhar sob concorrência real.
+
+---
+
+Developed by S. Ajiki.
