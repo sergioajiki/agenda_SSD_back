@@ -77,6 +77,10 @@ public class SecurityConfig {
                         // A agenda é exibida publicamente em vários lugares (ex.: telas de
                         // consulta) — só criar/editar/excluir reunião exige login, listar não.
                         .requestMatchers(HttpMethod.GET, "/api/meeting", "/api/meeting/**").permitAll()
+                        // A tela de recepção (/display) busca essa configuração sem estar
+                        // logada, mesma lógica da agenda acima — só alterar exige ADMIN
+                        // (@PreAuthorize em DisplaySettingsController.updateSettings).
+                        .requestMatchers(HttpMethod.GET, "/api/display-settings").permitAll()
                         // Health check e documentação Swagger também ficam abertos.
                         .requestMatchers("/api/health", "/api/health/**").permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
