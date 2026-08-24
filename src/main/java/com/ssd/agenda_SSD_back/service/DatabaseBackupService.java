@@ -28,12 +28,16 @@ import java.util.stream.Stream;
  * incompleta por ter sido feita com a aplicação ainda aberta (ver runbook
  * de hospedagem).
  *
- * Dois caminhos:
+ * Três caminhos:
  * - {@link #scheduledBackup()} — agendado (ver {@code backup.cron}), grava
  *   sempre em {@code backup.dir} e aplica a limpeza de backups antigos.
  * - {@link #manualBackup(String)} — sob demanda (ver {@code BackupController}),
  *   aceita uma pasta customizada e nunca apaga nada — quem pede um backup
  *   avulso decide o que fazer com ele depois.
+ * - {@link #createTempBackup()} — sob demanda, pra download direto no
+ *   navegador do admin (fica fora do servidor de verdade) — grava numa
+ *   pasta temporária que o próprio chamador apaga depois de ler o
+ *   conteúdo, não polui {@code backup.dir} nem some limitado.
  */
 @Service
 public class DatabaseBackupService {
@@ -76,6 +80,17 @@ public class DatabaseBackupService {
         Path created = createBackup(targetDir);
         log.info("Backup manual do banco criado: {}", created);
         return created;
+    }
+
+    /**
+     * Gera um backup numa pasta temporária do sistema — quem chama é
+     * responsável por ler o conteúdo e apagar o arquivo (e a pasta) logo em
+     * seguida. Existe só pro fluxo de download direto no navegador
+     * (BackupController.downloadBackup) — não fica de pé no servidor.
+     */
+    public Path createTempBackup() throws IOException {
+        Path tempDir = Files.createTempDirectory("agenda-backup-");
+        return createBackup(tempDir.toString());
     }
 
     private Path createBackup(String targetDir) throws IOException {
