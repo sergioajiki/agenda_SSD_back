@@ -128,4 +128,18 @@ public class GeneralControllerAdvice {
         );
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(problem);
     }
+
+    // Falha de I/O ao gerar um backup (ex.: pasta inválida/sem permissão) —
+    // ver BackupController. Diferente dos outros handlers acima, é erro do
+    // lado do servidor, não do pedido em si, por isso 500 em vez de 400.
+    @ExceptionHandler
+    public ResponseEntity<Problem> handleUncheckedIOException(java.io.UncheckedIOException exception) {
+        Problem problem = new Problem(
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                "Backup Failed",
+                exception.getMessage(),
+                null
+        );
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(problem);
+    }
 }

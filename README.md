@@ -13,6 +13,7 @@ API REST da aplicação de agendamento de reuniões da **Superintendência de Sa
 - **Log de auditoria** de criação, edição e exclusão de reuniões (admin-only), consultável por reunião, por usuário ou por período.
 - **Health check** (`/api/health`) com status da aplicação, uptime, memória e status do banco — público.
 - **Configuração da tela de recepção** (`/api/display-settings`) — modo (letreiro contínuo ou carrossel paginado) e velocidade do carrossel de "próximos dias" exibido em `/display` no front-end. Leitura pública (a própria TV busca sem estar logada), troca restrita a `ADMIN`.
+- **Backup automático do banco** — semanal (configurável via `backup.cron`), usando o comando nativo `BACKUP TO` do H2 (operação online, não bloqueia a aplicação nem exige parar nada). Mantém os últimos `backup.keep` backups agendados, apagando os mais antigos. Também dá pra pedir um **backup avulso** a qualquer momento via `POST /api/backup` (ADMIN), com uma pasta de destino opcional — não entra na limpeza automática.
 - **Documentação interativa** via Swagger UI.
 
 ## Stack
@@ -89,6 +90,7 @@ Sem essas duas variáveis, a subida falha de propósito (erro de placeholder nã
 | `GET` | `/api/health` | Status da aplicação e do banco | Público |
 | `GET` | `/api/display-settings` | Lê modo/velocidade do carrossel da tela de recepção | Público |
 | `PUT` | `/api/display-settings` | Atualiza modo/velocidade do carrossel | ADMIN |
+| `POST` | `/api/backup` | Cria um backup avulso do banco agora, opcionalmente numa pasta customizada (`{"directory": "..."}`) | ADMIN |
 
 Detalhes de request/response de cada endpoint estão no Swagger UI.
 
@@ -104,8 +106,8 @@ Detalhes de request/response de cada endpoint estão no Swagger UI.
 
 ```
 src/main/java/com/ssd/agenda_SSD_back/
-├─ controller/   # UserController, MeetingController, LogUpdateController, HealthController, DisplaySettingsController
-├─ service/      # UserService, MeetingService, LogUpdateService, DisplaySettingsService
+├─ controller/   # UserController, MeetingController, LogUpdateController, HealthController, DisplaySettingsController, BackupController
+├─ service/      # UserService, MeetingService, LogUpdateService, DisplaySettingsService, DatabaseBackupService
 ├─ repository/   # interfaces JpaRepository (User, Meeting, LogUpdate, DisplaySettings)
 ├─ entity/       # User, Meeting, LogUpdate, DisplaySettings
 ├─ dto/          # DTOs de request/response, com toEntity/fromEntity estáticos
