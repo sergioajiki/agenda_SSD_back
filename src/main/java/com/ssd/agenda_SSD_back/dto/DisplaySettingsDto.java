@@ -1,6 +1,8 @@
 package com.ssd.agenda_SSD_back.dto;
 
 import com.ssd.agenda_SSD_back.entity.DisplaySettings;
+import com.ssd.agenda_SSD_back.enums.DisplayBannerPosition;
+import com.ssd.agenda_SSD_back.enums.DisplayBannerSize;
 import com.ssd.agenda_SSD_back.enums.DisplayCarouselMode;
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -19,6 +21,12 @@ public class DisplaySettingsDto {
 
     @Schema(description = "Minutos de agenda entre o fim de uma exibição do banner e o início da próxima (1 a 30). No PUT, null mantém o valor atual.")
     private Integer bannerIntervalMinutes;
+
+    @Schema(description = "Quanto da tela o banner cobre: FULL (tela inteira, no lugar da agenda) ou QUARTER (1/4 da tela, num canto, por cima da agenda). No PUT, null mantém o valor atual.")
+    private DisplayBannerSize bannerSize;
+
+    @Schema(description = "Canto do banner no tamanho QUARTER: TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT ou BOTTOM_RIGHT. No PUT, null mantém o valor atual.")
+    private DisplayBannerPosition bannerPosition;
 
     @Schema(description = "Versão da imagem do banner (momento do upload, epoch ms), ou null se não houver imagem. Somente leitura — ignorado no PUT.", accessMode = Schema.AccessMode.READ_ONLY)
     private Long bannerVersion;
@@ -63,6 +71,22 @@ public class DisplaySettingsDto {
         this.bannerIntervalMinutes = bannerIntervalMinutes;
     }
 
+    public DisplayBannerSize getBannerSize() {
+        return bannerSize;
+    }
+
+    public void setBannerSize(DisplayBannerSize bannerSize) {
+        this.bannerSize = bannerSize;
+    }
+
+    public DisplayBannerPosition getBannerPosition() {
+        return bannerPosition;
+    }
+
+    public void setBannerPosition(DisplayBannerPosition bannerPosition) {
+        this.bannerPosition = bannerPosition;
+    }
+
     public Long getBannerVersion() {
         return bannerVersion;
     }
@@ -83,6 +107,8 @@ public class DisplaySettingsDto {
         dto.setBannerEnabled(settings.getBannerEnabled());
         dto.setBannerDurationSeconds(settings.getBannerDurationSeconds());
         dto.setBannerIntervalMinutes(settings.getBannerIntervalMinutes());
+        dto.setBannerSize(settings.getBannerSize());
+        dto.setBannerPosition(settings.getBannerPosition());
         dto.setBannerVersion(bannerVersion);
         return dto;
     }

@@ -11,6 +11,8 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
+import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -127,6 +129,32 @@ public class GeneralControllerAdvice {
                 null
         );
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(problem);
+    }
+
+    // Upload acima de spring.servlet.multipart.max-file-size (banner da tela
+    // de recepção). Estoura antes de chegar no controller, então a regra de
+    // DisplayBannerService não chega a rodar — a mensagem precisa vir daqui.
+    @ExceptionHandler
+    public ResponseEntity<Problem> handleMaxUploadSizeExceededException(MaxUploadSizeExceededException exception) {
+        Problem problem = new Problem(
+                HttpStatus.BAD_REQUEST.value(),
+                "Invalid Request Info",
+                "A imagem passa de 1 MB.",
+                null
+        );
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problem);
+    }
+
+    // POST do banner sem o campo "file" no multipart.
+    @ExceptionHandler
+    public ResponseEntity<Problem> handleMissingServletRequestPartException(MissingServletRequestPartException exception) {
+        Problem problem = new Problem(
+                HttpStatus.BAD_REQUEST.value(),
+                "Invalid Request Info",
+                "Selecione uma imagem para enviar.",
+                null
+        );
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problem);
     }
 
     // Falha de I/O ao gerar um backup (ex.: pasta inválida/sem permissão) —

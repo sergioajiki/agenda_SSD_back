@@ -2,6 +2,8 @@ package com.ssd.agenda_SSD_back.service;
 
 import com.ssd.agenda_SSD_back.dto.DisplaySettingsDto;
 import com.ssd.agenda_SSD_back.entity.DisplaySettings;
+import com.ssd.agenda_SSD_back.enums.DisplayBannerPosition;
+import com.ssd.agenda_SSD_back.enums.DisplayBannerSize;
 import com.ssd.agenda_SSD_back.enums.DisplayCarouselMode;
 import com.ssd.agenda_SSD_back.exception.BusinessRuleException;
 import com.ssd.agenda_SSD_back.repository.DisplayBannerRepository;
@@ -28,6 +30,10 @@ public class DisplaySettingsService {
     private static final boolean DEFAULT_BANNER_ENABLED = false;
     private static final int DEFAULT_BANNER_DURATION_SECONDS = 15;
     private static final int DEFAULT_BANNER_INTERVAL_MINUTES = 2;
+    // Tela cheia foi o primeiro formato do banner — base antiga continua igual.
+    private static final DisplayBannerSize DEFAULT_BANNER_SIZE = DisplayBannerSize.FULL;
+    // Canto que esconde menos: data, relógio e horários continuam à vista.
+    private static final DisplayBannerPosition DEFAULT_BANNER_POSITION = DisplayBannerPosition.BOTTOM_RIGHT;
 
     private final DisplaySettingsRepository displaySettingsRepository;
     private final DisplayBannerRepository displayBannerRepository;
@@ -94,8 +100,23 @@ public class DisplaySettingsService {
         settings.setBannerEnabled(enabled);
         settings.setBannerDurationSeconds(duration);
         settings.setBannerIntervalMinutes(interval);
+        if (dto.getBannerSize() != null) {
+            settings.setBannerSize(dto.getBannerSize());
+        }
+        if (dto.getBannerPosition() != null) {
+            settings.setBannerPosition(dto.getBannerPosition());
+        }
 
         return toDto(displaySettingsRepository.save(settings));
+    }
+
+    // Chamado quando a imagem é removida (DisplayBannerService.delete).
+    public void disableBanner() {
+        DisplaySettings settings = displaySettingsRepository.findById(SETTINGS_ID)
+                .orElseGet(this::createDefaultSettings);
+        applyDefaults(settings);
+        settings.setBannerEnabled(false);
+        displaySettingsRepository.save(settings);
     }
 
     private DisplaySettings createDefaultSettings() {
@@ -120,6 +141,12 @@ public class DisplaySettingsService {
         }
         if (settings.getBannerIntervalMinutes() == null) {
             settings.setBannerIntervalMinutes(DEFAULT_BANNER_INTERVAL_MINUTES);
+        }
+        if (settings.getBannerSize() == null) {
+            settings.setBannerSize(DEFAULT_BANNER_SIZE);
+        }
+        if (settings.getBannerPosition() == null) {
+            settings.setBannerPosition(DEFAULT_BANNER_POSITION);
         }
     }
 

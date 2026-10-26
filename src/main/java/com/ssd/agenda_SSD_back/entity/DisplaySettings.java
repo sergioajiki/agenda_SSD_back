@@ -1,5 +1,7 @@
 package com.ssd.agenda_SSD_back.entity;
 
+import com.ssd.agenda_SSD_back.enums.DisplayBannerPosition;
+import com.ssd.agenda_SSD_back.enums.DisplayBannerSize;
 import com.ssd.agenda_SSD_back.enums.DisplayCarouselMode;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -32,6 +34,12 @@ public class DisplaySettings {
     private Integer bannerDurationSeconds;
 
     private Integer bannerIntervalMinutes;
+
+    @Enumerated(EnumType.STRING)
+    private DisplayBannerSize bannerSize;
+
+    @Enumerated(EnumType.STRING)
+    private DisplayBannerPosition bannerPosition;
 
     public Long getId() {
         return id;
@@ -79,5 +87,21 @@ public class DisplaySettings {
 
     public void setBannerIntervalMinutes(Integer bannerIntervalMinutes) {
         this.bannerIntervalMinutes = bannerIntervalMinutes;
+    }
+
+    public DisplayBannerSize getBannerSize() {
+        return bannerSize;
+    }
+
+    public void setBannerSize(DisplayBannerSize bannerSize) {
+        this.bannerSize = bannerSize;
+    }
+
+    public DisplayBannerPosition getBannerPosition() {
+        return bannerPosition;
+    }
+
+    public void setBannerPosition(DisplayBannerPosition bannerPosition) {
+        this.bannerPosition = bannerPosition;
     }
 }

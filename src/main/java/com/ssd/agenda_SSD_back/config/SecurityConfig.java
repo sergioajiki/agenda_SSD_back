@@ -80,7 +80,8 @@ public class SecurityConfig {
                         // A tela de recepção (/display) busca essa configuração sem estar
                         // logada, mesma lógica da agenda acima — só alterar exige ADMIN
                         // (@PreAuthorize em DisplaySettingsController.updateSettings).
-                        .requestMatchers(HttpMethod.GET, "/api/display-settings").permitAll()
+                        // A imagem do banner também: é a própria TV que a baixa.
+                        .requestMatchers(HttpMethod.GET, "/api/display-settings", "/api/display-settings/banner").permitAll()
                         // Health check e documentação Swagger também ficam abertos.
                         .requestMatchers("/api/health", "/api/health/**").permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
