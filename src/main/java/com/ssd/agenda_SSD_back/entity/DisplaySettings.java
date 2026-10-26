@@ -24,6 +24,15 @@ public class DisplaySettings {
     @Enumerated(EnumType.STRING)
     private DisplayCarouselMode mode;
 
+    // Banner (imagem em DisplayBanner). Colunas criadas pelo ddl-auto=update
+    // depois que a linha já existia — numa base antiga chegam null, e quem
+    // trata isso como valor padrão é o DisplaySettingsService.
+    private Boolean bannerEnabled;
+
+    private Integer bannerDurationSeconds;
+
+    private Integer bannerIntervalMinutes;
+
     public Long getId() {
         return id;
     }
@@ -46,5 +55,29 @@ public class DisplaySettings {
 
     public void setMode(DisplayCarouselMode mode) {
         this.mode = mode;
+    }
+
+    public Boolean getBannerEnabled() {
+        return bannerEnabled;
+    }
+
+    public void setBannerEnabled(Boolean bannerEnabled) {
+        this.bannerEnabled = bannerEnabled;
+    }
+
+    public Integer getBannerDurationSeconds() {
+        return bannerDurationSeconds;
+    }
+
+    public void setBannerDurationSeconds(Integer bannerDurationSeconds) {
+        this.bannerDurationSeconds = bannerDurationSeconds;
+    }
+
+    public Integer getBannerIntervalMinutes() {
+        return bannerIntervalMinutes;
+    }
+
+    public void setBannerIntervalMinutes(Integer bannerIntervalMinutes) {
+        this.bannerIntervalMinutes = bannerIntervalMinutes;
     }
 }
