@@ -70,6 +70,7 @@ public class DisplayBannerService {
                     "A imagem tem " + size[0] + " x " + size[1] + " px. O máximo é " + MAX_DIMENSION + " px de cada lado.");
         }
 
+        boolean firstImage = !displayBannerRepository.existsById(DisplaySettingsService.SETTINGS_ID);
         DisplayBanner banner = displayBannerRepository.findById(DisplaySettingsService.SETTINGS_ID)
                 .orElseGet(DisplayBanner::new);
         banner.setId(DisplaySettingsService.SETTINGS_ID);
@@ -79,6 +80,13 @@ public class DisplayBannerService {
         banner.setHeight(size[1]);
         banner.setVersion(System.currentTimeMillis());
         displayBannerRepository.save(banner);
+
+        // Quem envia a primeira imagem quer vê-la na TV — liga junto, sem um
+        // passo extra no painel. Numa troca de imagem o estado fica como
+        // estava: um banner pausado continua pausado.
+        if (firstImage) {
+            displaySettingsService.setBannerEnabled(true);
+        }
 
         return displaySettingsService.getSettings();
     }
@@ -95,7 +103,7 @@ public class DisplayBannerService {
         if (displayBannerRepository.existsById(DisplaySettingsService.SETTINGS_ID)) {
             displayBannerRepository.deleteById(DisplaySettingsService.SETTINGS_ID);
         }
-        displaySettingsService.disableBanner();
+        displaySettingsService.setBannerEnabled(false);
         return displaySettingsService.getSettings();
     }
 

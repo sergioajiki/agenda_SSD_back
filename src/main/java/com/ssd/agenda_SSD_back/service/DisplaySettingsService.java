@@ -2,6 +2,7 @@ package com.ssd.agenda_SSD_back.service;
 
 import com.ssd.agenda_SSD_back.dto.DisplaySettingsDto;
 import com.ssd.agenda_SSD_back.entity.DisplaySettings;
+import com.ssd.agenda_SSD_back.enums.DisplayBannerEffect;
 import com.ssd.agenda_SSD_back.enums.DisplayBannerPosition;
 import com.ssd.agenda_SSD_back.enums.DisplayBannerSize;
 import com.ssd.agenda_SSD_back.enums.DisplayCarouselMode;
@@ -34,6 +35,8 @@ public class DisplaySettingsService {
     private static final DisplayBannerSize DEFAULT_BANNER_SIZE = DisplayBannerSize.FULL;
     // Canto que esconde menos: data, relógio e horários continuam à vista.
     private static final DisplayBannerPosition DEFAULT_BANNER_POSITION = DisplayBannerPosition.BOTTOM_RIGHT;
+    // Fade foi o primeiro efeito — base antiga continua igual.
+    private static final DisplayBannerEffect DEFAULT_BANNER_EFFECT = DisplayBannerEffect.FADE;
 
     private final DisplaySettingsRepository displaySettingsRepository;
     private final DisplayBannerRepository displayBannerRepository;
@@ -106,16 +109,21 @@ public class DisplaySettingsService {
         if (dto.getBannerPosition() != null) {
             settings.setBannerPosition(dto.getBannerPosition());
         }
+        if (dto.getBannerEffect() != null) {
+            settings.setBannerEffect(dto.getBannerEffect());
+        }
 
         return toDto(displaySettingsRepository.save(settings));
     }
 
-    // Chamado quando a imagem é removida (DisplayBannerService.delete).
-    public void disableBanner() {
+    // Chamado pelo DisplayBannerService: liga ao receber a primeira imagem e
+    // desliga quando ela é removida. Sem a checagem de "tem imagem?" do
+    // updateSettings — quem chama já acabou de gravar/apagar a imagem.
+    public void setBannerEnabled(boolean enabled) {
         DisplaySettings settings = displaySettingsRepository.findById(SETTINGS_ID)
                 .orElseGet(this::createDefaultSettings);
         applyDefaults(settings);
-        settings.setBannerEnabled(false);
+        settings.setBannerEnabled(enabled);
         displaySettingsRepository.save(settings);
     }
 
@@ -147,6 +155,9 @@ public class DisplaySettingsService {
         }
         if (settings.getBannerPosition() == null) {
             settings.setBannerPosition(DEFAULT_BANNER_POSITION);
+        }
+        if (settings.getBannerEffect() == null) {
+            settings.setBannerEffect(DEFAULT_BANNER_EFFECT);
         }
     }
 

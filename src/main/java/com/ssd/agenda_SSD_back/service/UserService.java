@@ -190,6 +190,19 @@ public class UserService {
         userRepository.save(user);
     }
 
+    // Renovação do token (UserController.refreshToken): o usuário já provou a
+    // senha no login, mas confere de novo se ainda está ativo — desativado no
+    // meio da sessão não ganha token novo.
+    public User getActiveUserByEmail(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
+
+        if (!user.isEnabled()) {
+            throw new IllegalArgumentException("Usuário desativado");
+        }
+        return user;
+    }
+
     public User login(String email, String password) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));

@@ -1,13 +1,17 @@
 package com.ssd.agenda_SSD_back.entity;
 
+import com.ssd.agenda_SSD_back.enums.DisplayBannerEffect;
 import com.ssd.agenda_SSD_back.enums.DisplayBannerPosition;
 import com.ssd.agenda_SSD_back.enums.DisplayBannerSize;
 import com.ssd.agenda_SSD_back.enums.DisplayCarouselMode;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 /**
  * Configuração da tela pública de recepção (/display) — como a faixa
@@ -35,11 +39,25 @@ public class DisplaySettings {
 
     private Integer bannerIntervalMinutes;
 
+    // Texto comum (VARCHAR), e não o ENUM nativo que o Hibernate cria no H2
+    // por padrão: o ddl-auto=update não acrescenta valores a um ENUM já
+    // criado, então uma opção nova (ex.: NINTH) quebraria a gravação numa
+    // base existente. Com o mapeamento em VARCHAR, o próprio ddl-auto=update
+    // converte uma coluna que já era ENUM (alter column ... varchar), mantendo os valores.
     @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
+    @Column(length = 20)
     private DisplayBannerSize bannerSize;
 
     @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
+    @Column(length = 20)
     private DisplayBannerPosition bannerPosition;
+
+    @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
+    @Column(length = 20)
+    private DisplayBannerEffect bannerEffect;
 
     public Long getId() {
         return id;
@@ -103,5 +121,13 @@ public class DisplaySettings {
 
     public void setBannerPosition(DisplayBannerPosition bannerPosition) {
         this.bannerPosition = bannerPosition;
+    }
+
+    public DisplayBannerEffect getBannerEffect() {
+        return bannerEffect;
+    }
+
+    public void setBannerEffect(DisplayBannerEffect bannerEffect) {
+        this.bannerEffect = bannerEffect;
     }
 }

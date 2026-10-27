@@ -153,4 +153,22 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
+
+    // Sessão por inatividade: enquanto o usuário está mexendo na tela, o
+    // front troca o token por um novo antes de ele vencer — quem fica parado
+    // não renova e cai pelo tempo. Exige um token ainda válido (não é público
+    // no SecurityConfig), então um token vencido não "ressuscita" a sessão.
+    // A role vem do banco de novo, então uma troca de role passa a valer na
+    // próxima renovação, sem esperar um novo login.
+    @PostMapping("/refresh-token")
+    @Operation(summary = "Renovar token", description = "Troca um token ainda válido por um novo, com a validade completa (usado enquanto o usuário está ativo)")
+    public ResponseEntity<LoginResponseDto> refreshToken(Authentication authentication) {
+        try {
+            User user = userService.getActiveUserByEmail(authentication.getName());
+            String token = jwtService.generateToken(user.getEmail(), user.getRole().name());
+            return ResponseEntity.ok(LoginResponseDto.fromEntity(user, token));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+    }
 }

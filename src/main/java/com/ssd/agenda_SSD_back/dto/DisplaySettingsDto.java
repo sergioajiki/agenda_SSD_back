@@ -1,6 +1,7 @@
 package com.ssd.agenda_SSD_back.dto;
 
 import com.ssd.agenda_SSD_back.entity.DisplaySettings;
+import com.ssd.agenda_SSD_back.enums.DisplayBannerEffect;
 import com.ssd.agenda_SSD_back.enums.DisplayBannerPosition;
 import com.ssd.agenda_SSD_back.enums.DisplayBannerSize;
 import com.ssd.agenda_SSD_back.enums.DisplayCarouselMode;
@@ -22,11 +23,14 @@ public class DisplaySettingsDto {
     @Schema(description = "Minutos de agenda entre o fim de uma exibição do banner e o início da próxima (1 a 30). No PUT, null mantém o valor atual.")
     private Integer bannerIntervalMinutes;
 
-    @Schema(description = "Quanto da tela o banner cobre: FULL (tela inteira, no lugar da agenda) ou QUARTER (1/4 da tela, num canto, por cima da agenda). No PUT, null mantém o valor atual.")
+    @Schema(description = "Quanto da tela o banner cobre: FULL (tela inteira, no lugar da agenda), QUARTER (1/4 da tela, num canto, por cima da agenda) ou NINTH (1/9 da tela, idem). No PUT, null mantém o valor atual.")
     private DisplayBannerSize bannerSize;
 
-    @Schema(description = "Canto do banner no tamanho QUARTER: TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT ou BOTTOM_RIGHT. No PUT, null mantém o valor atual.")
+    @Schema(description = "Canto do banner nos tamanhos QUARTER e NINTH: TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT ou BOTTOM_RIGHT. No PUT, null mantém o valor atual.")
     private DisplayBannerPosition bannerPosition;
+
+    @Schema(description = "Como o banner entra e sai: FADE (transição de opacidade) ou SLIDE_UP (sobe de baixo da tela e desce). No PUT, null mantém o valor atual.")
+    private DisplayBannerEffect bannerEffect;
 
     @Schema(description = "Versão da imagem do banner (momento do upload, epoch ms), ou null se não houver imagem. Somente leitura — ignorado no PUT.", accessMode = Schema.AccessMode.READ_ONLY)
     private Long bannerVersion;
@@ -87,6 +91,14 @@ public class DisplaySettingsDto {
         this.bannerPosition = bannerPosition;
     }
 
+    public DisplayBannerEffect getBannerEffect() {
+        return bannerEffect;
+    }
+
+    public void setBannerEffect(DisplayBannerEffect bannerEffect) {
+        this.bannerEffect = bannerEffect;
+    }
+
     public Long getBannerVersion() {
         return bannerVersion;
     }
@@ -109,6 +121,7 @@ public class DisplaySettingsDto {
         dto.setBannerIntervalMinutes(settings.getBannerIntervalMinutes());
         dto.setBannerSize(settings.getBannerSize());
         dto.setBannerPosition(settings.getBannerPosition());
+        dto.setBannerEffect(settings.getBannerEffect());
         dto.setBannerVersion(bannerVersion);
         return dto;
     }
