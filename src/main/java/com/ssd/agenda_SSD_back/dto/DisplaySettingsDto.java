@@ -23,10 +23,10 @@ public class DisplaySettingsDto {
     @Schema(description = "Minutos de agenda entre o fim de uma exibição do banner e o início da próxima (1 a 30). No PUT, null mantém o valor atual.")
     private Integer bannerIntervalMinutes;
 
-    @Schema(description = "Quanto da tela o banner cobre: FULL (tela inteira, no lugar da agenda), QUARTER (1/4 da tela, num canto, por cima da agenda) ou NINTH (1/9 da tela, idem). No PUT, null mantém o valor atual.")
+    @Schema(description = "Quanto da tela o banner cobre: FULL (tela inteira, no lugar da agenda), QUARTER (1/4 da tela, num canto, por cima da agenda) , NINTH (1/9 da tela, idem) ou SIXTEENTH (1/16 da tela, para logo). No PUT, null mantém o valor atual.")
     private DisplayBannerSize bannerSize;
 
-    @Schema(description = "Canto do banner nos tamanhos QUARTER e NINTH: TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT ou BOTTOM_RIGHT. No PUT, null mantém o valor atual.")
+    @Schema(description = "Canto do banner nos tamanhos QUARTER, NINTH e SIXTEENTH: TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT ou BOTTOM_RIGHT. No PUT, null mantém o valor atual.")
     private DisplayBannerPosition bannerPosition;
 
     @Schema(description = "Como o banner entra e sai: FADE (transição de opacidade) ou SLIDE_UP (sobe de baixo da tela e desce). No PUT, null mantém o valor atual.")

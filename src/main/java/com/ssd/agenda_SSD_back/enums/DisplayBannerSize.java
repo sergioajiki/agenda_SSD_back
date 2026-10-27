@@ -8,5 +8,8 @@ public enum DisplayBannerSize {
     QUARTER,
     // Um terço da largura e um terço da altura, num canto, por cima da agenda.
     // Para avisos curtos (título grande e no máximo uma frase).
-    NINTH
+    NINTH,
+    // Um quarto da largura e um quarto da altura, num canto. Só para logo ou
+    // ícone — texto fica pequeno demais para ler da recepção.
+    SIXTEENTH
 }
